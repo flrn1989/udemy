@@ -4,7 +4,6 @@
 package udemy.curso.categoria;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +22,11 @@ public class CategoriaService {
 
 		Optional<Categoria> categoria = repositorio.findById(id);
 
-		return categoria.orElseThrow(suprirExcecaoDeBuscaVazia());
+		return categoria.orElseThrow(() -> excecaoDeBuscaVazia());
 	}
 
-	private Supplier<Throwable> suprirExcecaoDeBuscaVazia() {
-		return new Supplier<Throwable>() {
-			@Override
-			public Throwable get() {
-				return new Exception("A busca realizada não obteve resultado.");
-			}
-		};
+	private Throwable excecaoDeBuscaVazia() {
+		return new Exception("A busca realizada não obteve resultado.");
 	}
 
 }
