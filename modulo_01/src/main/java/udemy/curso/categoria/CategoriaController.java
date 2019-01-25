@@ -3,7 +3,6 @@
  */
 package udemy.curso.categoria;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +23,7 @@ public class CategoriaController {
 	/** @return Todas as Categorias. */
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Categoria> listar() {
-
-		Categoria categoria1 = new Categoria(1L, "Militar");
-		Categoria categoria2 = new Categoria(2L, "Direito");
-
-		List<Categoria> categorias = new ArrayList<Categoria>();
-		categorias.add(categoria1);
-		categorias.add(categoria2);
-
-		return categorias;
+		return servico.listar();
 	}
 
 	/** @param id
