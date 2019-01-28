@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.categoria;
+package udemy.curso.produto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,15 +11,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import udemy.curso.produto.Produto;
+import udemy.curso.categoria.Categoria;
 
-/** Classe de domínio de Categoria. */
+/** Classe para o domínio Produto. */
 @Entity
-public class Categoria implements Serializable {
+public class Produto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,17 +31,26 @@ public class Categoria implements Serializable {
 
 	private String nome;
 
-	@JsonBackReference
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<Produto>();
+	private Double preco;
+
+	@JsonManagedReference
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA",
+			joinColumns = {
+					@JoinColumn(name = "ID_PRODUTO") },
+			inverseJoinColumns = {
+					@JoinColumn(name = "ID_CATEGORIA") })
+	private List<Categoria> categorias = new ArrayList<Categoria>();
 
 	/** Construtor padrão. */
-	public Categoria() {
+	public Produto() {
 	}
 
-	/** @param nome */
-	public Categoria(String nome) {
+	/** @param nome
+	 * @param preco */
+	public Produto(String nome, Double preco) {
 		this.nome = nome;
+		this.preco = preco;
 	}
 
 	/** {@inheritDoc} */
@@ -48,6 +59,7 @@ public class Categoria implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((preco == null) ? 0 : preco.hashCode());
 		return result;
 	}
 
@@ -63,7 +75,7 @@ public class Categoria implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (nome == null) {
 			if (other.nome != null) {
 				return false;
@@ -94,14 +106,24 @@ public class Categoria implements Serializable {
 		this.nome = nome;
 	}
 
-	/** @return the produtos */
-	public List<Produto> getProdutos() {
-		return produtos;
+	/** @return the preco */
+	public Double getPreco() {
+		return preco;
 	}
 
-	/** @param produtos the produtos to set */
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	/** @param preco the preco to set */
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	/** @return the categorias */
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	/** @param categorias the categorias to set */
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 }

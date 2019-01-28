@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 /** Repositório do domínio Categoria. */
 @Repository
-public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.categoria;
+package udemy.curso.produto;
 
 import java.util.List;
 
@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Controller do domínio Categoria. */
+/** Controller do domínio Produto. */
 @RestController
-@RequestMapping(value = "/categorias")
-public class CategoriaController {
+@RequestMapping(value = "/produtos")
+public class ProdutoController {
 
 	@Autowired
-	private CategoriaService servico;
+	private ProdutoService servico;
 
-	/** @return Todas as Categorias. */
+	/** @return Todos os produtos. */
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Categoria> listar() {
+	public List<Produto> listar() {
 		return servico.listar();
 	}
 
 	/** @param id
-	 * @return Categoria referente ao ID fornecido.
+	 * @return Produto referente ao ID fornecido.
 	 * @throws Throwable */
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> obterPor(@PathVariable Integer id) {
