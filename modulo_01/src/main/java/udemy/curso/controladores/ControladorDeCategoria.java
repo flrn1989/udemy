@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.categoria;
+package udemy.curso.controladores;
 
 import java.util.List;
 
@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import udemy.curso.dominios.Categoria;
+import udemy.curso.servicos.ServicoDeCategoria;
+
 /** Controller do domínio Categoria. */
 @RestController
 @RequestMapping(value = "/categorias")
-public class CategoriaController {
+public class ControladorDeCategoria {
 
 	@Autowired
-	private CategoriaService servico;
+	private ServicoDeCategoria servico;
 
 	/** @return Todas as Categorias. */
 	@RequestMapping(method = RequestMethod.GET)
@@ -27,15 +30,10 @@ public class CategoriaController {
 	}
 
 	/** @param id
-	 * @return Categoria referente ao ID fornecido.
-	 * @throws Throwable */
+	 * @return Categoria referente ao ID fornecido. */
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> obterPor(@PathVariable Integer id) {
-		try {
-			return ResponseEntity.ok(servico.obterPor(id));
-		} catch (Throwable e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return ResponseEntity.ok(servico.obterPor(id));
 	}
 
 }

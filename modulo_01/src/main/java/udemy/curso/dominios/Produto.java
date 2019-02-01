@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.produto;
+package udemy.curso.dominios;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,8 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import udemy.curso.categoria.Categoria;
 
 /** Classe para o domínio Produto. */
 @Entity
@@ -37,10 +35,10 @@ public class Produto implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 			joinColumns = {
-					@JoinColumn(name = "ID_PRODUTO") },
+					@JoinColumn(name = "PRODUTO_ID") },
 			inverseJoinColumns = {
-					@JoinColumn(name = "ID_CATEGORIA") })
-	private List<Categoria> categorias = new ArrayList<Categoria>();
+					@JoinColumn(name = "CATEGORIA_ID") })
+	private List<Categoria> categorias = new ArrayList<>();
 
 	/** Construtor padrão. */
 	public Produto() {
@@ -51,6 +49,21 @@ public class Produto implements Serializable {
 	public Produto(String nome, Double preco) {
 		this.nome = nome;
 		this.preco = preco;
+	}
+
+	/** @param nome
+	 * @param preco
+	 * @param categorias */
+	public Produto(String nome, Double preco, List<Categoria> categorias) {
+		this(nome, preco);
+
+		this.categorias.addAll(categorias);
+
+		for (Categoria categoria : categorias) {
+			if (!categoria.getProdutos().contains(this)) {
+				categoria.getProdutos().add(this);
+			}
+		}
 	}
 
 	/** {@inheritDoc} */

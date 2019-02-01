@@ -1,26 +1,36 @@
 package udemy.curso;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import udemy.curso.categoria.Categoria;
-import udemy.curso.categoria.CategoriaRepository;
-import udemy.curso.produto.Produto;
-import udemy.curso.produto.ProdutoRepository;
+import udemy.curso.dominios.Categoria;
+import udemy.curso.dominios.Cidade;
+import udemy.curso.dominios.Estado;
+import udemy.curso.dominios.Produto;
+import udemy.curso.repositorios.RepositorioDeCategoria;
+import udemy.curso.repositorios.RepositorioDeCidade;
+import udemy.curso.repositorios.RepositorioDeEstado;
+import udemy.curso.repositorios.RepositorioDeProduto;
 
 /** Aplicacao */
 @SpringBootApplication
 public class Aplicacao implements CommandLineRunner {
 
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	private RepositorioDeCategoria repositorioDeCategoria;
+
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private RepositorioDeProduto repositorioDeProduto;
+
+	@Autowired
+	private RepositorioDeCidade repositorioDeCidade;
+
+	@Autowired
+	private RepositorioDeEstado repositorioDeEstado;
 
 	/** @param args */
 	public static void main(String[] args) {
@@ -39,30 +49,38 @@ public class Aplicacao implements CommandLineRunner {
 		Categoria categoria2 = new Categoria("Policial");
 		Categoria categoria3 = new Categoria("Direito");
 
-		Produto produto1 = new Produto("Faca", 30.00);
-		Produto produto2 = new Produto("Pistola", 20.00);
-		Produto produto3 = new Produto("Algemas", 10.00);
+		Produto produto1 = new Produto("Vade Mecum", 30.00,
+				Arrays.asList(categoria3));
+		Produto produto2 = new Produto("Algemas", 20.00,
+				Arrays.asList(categoria1, categoria2, categoria3));
+		Produto produto3 = new Produto("Uniforme", 10.00,
+				Arrays.asList(categoria1));
 
-		categoria1.getProdutos().add(produto3);
-		categoria2.getProdutos().addAll(Arrays.asList(produto2, produto1, produto3));
-		categoria3.getProdutos().add(produto1);
-
-		produto1.getCategorias().add(categoria3);
-		produto2.getCategorias().addAll(Arrays.asList(categoria1, categoria2, categoria3));
-		produto3.getCategorias().add(categoria1);
-
-		List<Categoria> categorias = Arrays.asList(
+		repositorioDeCategoria.saveAll(Arrays.asList(
 				categoria1,
 				categoria2,
-				categoria3);
+				categoria3));
 
-		List<Produto> produtos = Arrays.asList(
+		repositorioDeProduto.saveAll(Arrays.asList(
 				produto1,
 				produto2,
-				produto3);
+				produto3));
 
-		categoriaRepository.saveAll(categorias);
-		produtoRepository.saveAll(produtos);
+		Estado estado1 = new Estado("Rio Grande do Sul");
+		Estado estado2 = new Estado("Goiás");
+
+		Cidade cidade1 = new Cidade("Gramado", estado1);
+		Cidade cidade2 = new Cidade("Canela", estado1);
+		Cidade cidade3 = new Cidade("Posse", estado2);
+
+		repositorioDeEstado.saveAll(Arrays.asList(
+				estado1,
+				estado2));
+
+		repositorioDeCidade.saveAll(Arrays.asList(
+				cidade1,
+				cidade2,
+				cidade3));
 
 		return this;
 	}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.produto;
+package udemy.curso.controladores;
 
 import java.util.List;
 
@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import udemy.curso.dominios.Produto;
+import udemy.curso.servicos.ServicoDeProduto;
+
 /** Controller do domínio Produto. */
 @RestController
 @RequestMapping(value = "/produtos")
-public class ProdutoController {
+public class ControladorDeProduto {
 
 	@Autowired
-	private ProdutoService servico;
+	private ServicoDeProduto servico;
 
 	/** @return Todos os produtos. */
 	@RequestMapping(method = RequestMethod.GET)
@@ -27,15 +30,10 @@ public class ProdutoController {
 	}
 
 	/** @param id
-	 * @return Produto referente ao ID fornecido.
-	 * @throws Throwable */
+	 * @return Produto referente ao ID fornecido. */
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> obterPor(@PathVariable Integer id) {
-		try {
-			return ResponseEntity.ok(servico.obterPor(id));
-		} catch (Throwable e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return ResponseEntity.ok(servico.obterPor(id));
 	}
 
 }

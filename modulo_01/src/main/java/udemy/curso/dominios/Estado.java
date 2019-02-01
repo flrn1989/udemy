@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.categoria;
+package udemy.curso.dominios;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,15 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import udemy.curso.produto.Produto;
-
-/** Classe de domínio de Categoria. */
+/** Domínio de Estado. */
 @Entity
-public class Categoria implements Serializable {
+public class Estado implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,17 +25,46 @@ public class Categoria implements Serializable {
 
 	private String nome;
 
-	@JsonBackReference
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<Produto>();
+	@OneToMany(mappedBy = "estado")
+	private List<Cidade> cidades = new ArrayList<>();
 
 	/** Construtor padrão. */
-	public Categoria() {
+	public Estado() {
 	}
 
 	/** @param nome */
-	public Categoria(String nome) {
+	public Estado(String nome) {
 		this.nome = nome;
+	}
+
+	/** @return the id */
+	public Integer getId() {
+		return id;
+	}
+
+	/** @param id the id to set */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/** @return the nome */
+	public String getNome() {
+		return nome;
+	}
+
+	/** @param nome the nome to set */
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	/** @return the cidades */
+	public List<Cidade> getCidades() {
+		return cidades;
+	}
+
+	/** @param cidades the cidades to set */
+	public void setCidades(List<Cidade> cidades) {
+		this.cidades = cidades;
 	}
 
 	/** {@inheritDoc} */
@@ -63,7 +88,7 @@ public class Categoria implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Categoria other = (Categoria) obj;
+		Estado other = (Estado) obj;
 		if (nome == null) {
 			if (other.nome != null) {
 				return false;
@@ -72,36 +97,6 @@ public class Categoria implements Serializable {
 			return false;
 		}
 		return true;
-	}
-
-	/** @return the id */
-	public Integer getId() {
-		return id;
-	}
-
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/** @return the nome */
-	public String getNome() {
-		return nome;
-	}
-
-	/** @param nome the nome to set */
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	/** @return the produtos */
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	/** @param produtos the produtos to set */
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
 	}
 
 }
