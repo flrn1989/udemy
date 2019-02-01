@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import udemy.curso.dominios.Categoria;
 import udemy.curso.dominios.Cidade;
+import udemy.curso.dominios.Cliente;
+import udemy.curso.dominios.Endereco;
 import udemy.curso.dominios.Estado;
 import udemy.curso.dominios.Produto;
+import udemy.curso.dominios.enums.TipoCliente;
 import udemy.curso.repositorios.RepositorioDeCategoria;
 import udemy.curso.repositorios.RepositorioDeCidade;
+import udemy.curso.repositorios.RepositorioDeCliente;
+import udemy.curso.repositorios.RepositorioDeEndereco;
 import udemy.curso.repositorios.RepositorioDeEstado;
 import udemy.curso.repositorios.RepositorioDeProduto;
 
@@ -32,6 +37,12 @@ public class Aplicacao implements CommandLineRunner {
 	@Autowired
 	private RepositorioDeEstado repositorioDeEstado;
 
+	@Autowired
+	private RepositorioDeCliente repositorioDeCliente;
+
+	@Autowired
+	private RepositorioDeEndereco repositorioDeEndereco;
+
 	/** @param args */
 	public static void main(String[] args) {
 		SpringApplication.run(Aplicacao.class, args);
@@ -49,12 +60,18 @@ public class Aplicacao implements CommandLineRunner {
 		Categoria categoria2 = new Categoria("Policial");
 		Categoria categoria3 = new Categoria("Direito");
 
-		Produto produto1 = new Produto("Vade Mecum", 30.00,
-				Arrays.asList(categoria3));
-		Produto produto2 = new Produto("Algemas", 20.00,
-				Arrays.asList(categoria1, categoria2, categoria3));
-		Produto produto3 = new Produto("Uniforme", 10.00,
-				Arrays.asList(categoria1));
+		Produto produto1 = new Produto("Vade Mecum", 30.00);
+		Produto produto2 = new Produto("Algemas", 20.00);
+		Produto produto3 = new Produto("Uniforme", 10.00);
+
+		produto1.getCategorias().add(
+				categoria3);
+		produto2.getCategorias().addAll(Arrays.asList(
+				categoria1,
+				categoria2,
+				categoria3));
+		produto3.getCategorias().add(
+				categoria1);
 
 		repositorioDeCategoria.saveAll(Arrays.asList(
 				categoria1,
@@ -81,6 +98,30 @@ public class Aplicacao implements CommandLineRunner {
 				cidade1,
 				cidade2,
 				cidade3));
+
+		Endereco endereco1 = new Endereco("Rua Alfa Quadra 1", "101",
+				"Conjunto A", "Primeiro", "55888123", cidade1);
+		Endereco endereco2 = new Endereco("Rua Beta Quadra 2", "201",
+				"Conjunto B", "Segundo", "55888234", cidade2);
+
+		Cliente cliente1 = new Cliente("Pedro Farias", "pedrof@gmail.com",
+				"77788899900", TipoCliente.PF);
+
+		cliente1.getTelefones().addAll(Arrays.asList(
+				"44445555",
+				"988886666"));
+		cliente1.getEnderecos().addAll(Arrays.asList(
+				endereco1,
+				endereco2));
+		endereco1.setCliente(cliente1);
+		endereco2.setCliente(cliente1);
+
+		repositorioDeCliente.saveAll(Arrays.asList(
+				cliente1));
+
+		repositorioDeEndereco.saveAll(Arrays.asList(
+				endereco1,
+				endereco2));
 
 		return this;
 	}

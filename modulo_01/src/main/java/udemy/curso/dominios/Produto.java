@@ -4,8 +4,8 @@
 package udemy.curso.dominios;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +38,7 @@ public class Produto implements Serializable {
 					@JoinColumn(name = "PRODUTO_ID") },
 			inverseJoinColumns = {
 					@JoinColumn(name = "CATEGORIA_ID") })
-	private List<Categoria> categorias = new ArrayList<>();
+	private Set<Categoria> categorias = new HashSet<>();
 
 	/** Construtor padrão. */
 	public Produto() {
@@ -49,21 +49,6 @@ public class Produto implements Serializable {
 	public Produto(String nome, Double preco) {
 		this.nome = nome;
 		this.preco = preco;
-	}
-
-	/** @param nome
-	 * @param preco
-	 * @param categorias */
-	public Produto(String nome, Double preco, List<Categoria> categorias) {
-		this(nome, preco);
-
-		this.categorias.addAll(categorias);
-
-		for (Categoria categoria : categorias) {
-			if (!categoria.getProdutos().contains(this)) {
-				categoria.getProdutos().add(this);
-			}
-		}
 	}
 
 	/** {@inheritDoc} */
@@ -130,12 +115,12 @@ public class Produto implements Serializable {
 	}
 
 	/** @return the categorias */
-	public List<Categoria> getCategorias() {
+	public Set<Categoria> getCategorias() {
 		return categorias;
 	}
 
 	/** @param categorias the categorias to set */
-	public void setCategorias(List<Categoria> categorias) {
+	public void setCategorias(Set<Categoria> categorias) {
 		this.categorias = categorias;
 	}
 
