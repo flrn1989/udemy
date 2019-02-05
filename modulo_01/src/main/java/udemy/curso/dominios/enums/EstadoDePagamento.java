@@ -5,17 +5,20 @@ package udemy.curso.dominios.enums;
 
 import udemy.curso.interfaces.EnumIdentificavel;
 
-/** Enumerador para TipoCliente. */
-public enum TipoCliente implements EnumIdentificavel {
+/** Enumerador para estados de pagamentos. */
+public enum EstadoDePagamento implements EnumIdentificavel {
 
-	PF(1, "Pessoa Física"),
-	PJ(2, "Pessoa Jurídica");
+	PENDENTE(1, "Pendente"),
+	QUITADO(2, "Quitado"),
+	CANCELADO(3, "Cancelado");
 
 	private Integer id;
 
 	private String descricao;
 
-	private TipoCliente(Integer id, String descricao) {
+	/** @param id
+	 * @param descricao */
+	private EstadoDePagamento(Integer id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}

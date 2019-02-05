@@ -4,7 +4,9 @@
 package udemy.curso.dominios;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import udemy.curso.dominios.enums.TipoCliente;
+import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
 
 /** Domínio de Cliente. */
 @Entity
@@ -48,6 +51,8 @@ public class Cliente implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private Set<Endereco> enderecos = new HashSet<>();
+
+	private List<Pedido> pedidos = new ArrayList<>();
 
 	/** Construtor padrão. */
 	public Cliente() {
@@ -158,7 +163,7 @@ public class Cliente implements Serializable {
 
 	/** @return the tipoCliente */
 	public TipoCliente getTipoCliente() {
-		return TipoCliente.de(this.idDoTipoCliente);
+		return (TipoCliente) new ExtratoraDeEnumIdentificavel(TipoCliente.values()).de(this.idDoTipoCliente);
 	}
 
 	/** @param tipoCliente the tipoCliente to set */
@@ -187,6 +192,16 @@ public class Cliente implements Serializable {
 	/** @param enderecos the enderecos to set */
 	public void setEnderecos(Set<Endereco> enderecos) {
 		this.enderecos = enderecos;
+	}
+
+	/** @return the pedidos */
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	/** @param pedidos the pedidos to set */
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 }
