@@ -20,7 +20,7 @@ public abstract class ExcecaoRest extends RuntimeException {
 
 	/** @return rótulo do momento da exceção. */
 	private String rotuloDoMomento() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy - hh:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy - HH:mm:ss");
 		return this.momento.format(formatter);
 	}
 
