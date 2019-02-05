@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /** Domínio de Cidade. */
 @Entity
 public class Cidade implements Serializable {
@@ -27,10 +30,12 @@ public class Cidade implements Serializable {
 
 	private String nome;
 
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "ESTADO_ID")
 	private Estado estado;
 
+	@JsonBackReference
 	@Transient
 	private Set<Endereco> enderecos = new HashSet<>();
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import udemy.curso.dominios.Produto;
 import udemy.curso.servicos.ServicoDeProduto;
 
-/** Controller do domínio Produto. */
+/** Controlador do domínio Produto. */
 @RestController
 @RequestMapping(value = "/produtos")
 public class ControladorDeProduto {

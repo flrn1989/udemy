@@ -12,25 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import udemy.curso.dominios.Categoria;
-import udemy.curso.servicos.ServicoDeCategoria;
+import udemy.curso.dominios.Cliente;
+import udemy.curso.servicos.ServicoDeCliente;
 
-/** Controlador do domínio Categoria. */
+/** Controlador do domínio Cliente. */
 @RestController
-@RequestMapping(value = "/categorias")
-public class ControladorDeCategoria {
+@RequestMapping(value = "/clientes")
+public class ControladorDeCliente {
 
 	@Autowired
-	private ServicoDeCategoria servico;
+	private ServicoDeCliente servico;
 
-	/** @return Todas as Categorias. */
+	/** @return Todos os clientes. */
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Categoria> listar() {
+	public List<Cliente> listar() {
 		return servico.listar();
 	}
 
 	/** @param id
-	 * @return Categoria referente ao ID fornecido. */
+	 * @return Cliente referente ao ID fornecido. */
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> obterPor(@PathVariable Integer id) {
 		return ResponseEntity.ok(servico.obterPor(id));
