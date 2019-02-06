@@ -6,19 +6,39 @@ package udemy.curso.dominios;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /** Domínio para Pedido */
+@Entity
 public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private LocalDateTime instante;
 
+	@OneToOne
 	private Pagamento pagamento;
 
+	@JsonManagedReference
+	@ManyToOne
+	@JoinColumn(name = "CLIENTE_ID")
 	private Cliente cliente;
 
+	@ManyToOne
+	@JoinColumn(name = "ENDERECO_DE_ENTREGA_ID")
 	private Endereco enderecoDeEntrega;
 
 	/** Construtor padrão. */
@@ -26,14 +46,16 @@ public class Pedido implements Serializable {
 	}
 
 	/** @param instante
-	 * @param pagamento
 	 * @param cliente
 	 * @param enderecoDeEntrega */
-	public Pedido(LocalDateTime instante, Pagamento pagamento, Cliente cliente, Endereco enderecoDeEntrega) {
+	public Pedido(LocalDateTime instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		this.instante = instante;
-		this.pagamento = pagamento;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
+
+		if (this.cliente != null) {
+			this.cliente.getPedidos().add(this);
+		}
 	}
 
 	/** {@inheritDoc} */

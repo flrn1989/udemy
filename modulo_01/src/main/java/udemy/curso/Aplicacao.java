@@ -1,5 +1,8 @@
 package udemy.curso;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +15,20 @@ import udemy.curso.dominios.Cidade;
 import udemy.curso.dominios.Cliente;
 import udemy.curso.dominios.Endereco;
 import udemy.curso.dominios.Estado;
+import udemy.curso.dominios.Pagamento;
+import udemy.curso.dominios.PagamentoComBoleto;
+import udemy.curso.dominios.PagamentoComCartao;
+import udemy.curso.dominios.Pedido;
 import udemy.curso.dominios.Produto;
+import udemy.curso.dominios.enums.EstadoDePagamento;
 import udemy.curso.dominios.enums.TipoCliente;
 import udemy.curso.repositorios.RepositorioDeCategoria;
 import udemy.curso.repositorios.RepositorioDeCidade;
 import udemy.curso.repositorios.RepositorioDeCliente;
 import udemy.curso.repositorios.RepositorioDeEndereco;
 import udemy.curso.repositorios.RepositorioDeEstado;
+import udemy.curso.repositorios.RepositorioDePagamento;
+import udemy.curso.repositorios.RepositorioDePedido;
 import udemy.curso.repositorios.RepositorioDeProduto;
 
 /** Aplicacao */
@@ -42,6 +52,12 @@ public class Aplicacao implements CommandLineRunner {
 
 	@Autowired
 	private RepositorioDeEndereco repositorioDeEndereco;
+
+	@Autowired
+	private RepositorioDePedido repositorioDePedido;
+
+	@Autowired
+	private RepositorioDePagamento repositorioDePagamento;
 
 	/** @param args */
 	public static void main(String[] args) {
@@ -122,6 +138,37 @@ public class Aplicacao implements CommandLineRunner {
 		repositorioDeEndereco.saveAll(Arrays.asList(
 				endereco1,
 				endereco2));
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+		Pedido pedido1 = new Pedido(
+				LocalDateTime.parse("30/09/2017 10:32", formatter),
+				cliente1,
+				endereco1);
+
+		Pedido pedido2 = new Pedido(
+				LocalDateTime.parse("10/10/2017 19:35", formatter),
+				cliente1,
+				endereco1);
+
+		Pagamento pagamento1 = new PagamentoComCartao(
+				EstadoDePagamento.QUITADO,
+				pedido1,
+				6);
+
+		Pagamento pagamento2 = new PagamentoComBoleto(
+				EstadoDePagamento.PENDENTE,
+				pedido2,
+				LocalDate.parse("20/10/2017 00:00", formatter),
+				null);
+
+		repositorioDePagamento.saveAll(Arrays.asList(
+				pagamento1,
+				pagamento2));
+
+		repositorioDePedido.saveAll(Arrays.asList(
+				pedido1,
+				pedido2));
 
 		return this;
 	}

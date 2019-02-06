@@ -3,9 +3,12 @@
  */
 package udemy.curso.dominios;
 
+import javax.persistence.Entity;
+
 import udemy.curso.dominios.enums.EstadoDePagamento;
 
 /** Especialização do domínio Pagamento. */
+@Entity
 public class PagamentoComCartao extends Pagamento {
 
 	private static final long serialVersionUID = 1L;

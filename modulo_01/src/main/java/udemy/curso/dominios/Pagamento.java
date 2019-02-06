@@ -5,17 +5,35 @@ package udemy.curso.dominios;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+
 import udemy.curso.dominios.enums.EstadoDePagamento;
+import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
 
 /** Domínio de Pagamento. */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pagamento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	private Integer id;
 
+	@Column(name = "ESTADO")
 	private Integer idDoEstadoPagamento;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "PEDIDO_ID")
+	@MapsId
 	private Pedido pedido;
 
 	/** Construtor padrão. */
@@ -27,6 +45,10 @@ public abstract class Pagamento implements Serializable {
 	public Pagamento(EstadoDePagamento estadoPagamento, Pedido pedido) {
 		this.idDoEstadoPagamento = estadoPagamento.getId();
 		this.pedido = pedido;
+
+		if (this.pedido != null) {
+			this.pedido.setPagamento(this);
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -71,14 +93,16 @@ public abstract class Pagamento implements Serializable {
 		this.id = id;
 	}
 
-	/** @return the idDoEstadoPagamento */
-	public Integer getIdDoEstadoPagamento() {
-		return idDoEstadoPagamento;
+	/** @return the EstadoDePagamento */
+	public EstadoDePagamento getIdDoEstadoPagamento() {
+		return (EstadoDePagamento) new ExtratoraDeEnumIdentificavel(
+				EstadoDePagamento.values())
+						.de(idDoEstadoPagamento);
 	}
 
-	/** @param idDoEstadoPagamento the idDoEstadoPagamento to set */
-	public void setIdDoEstadoPagamento(Integer idDoEstadoPagamento) {
-		this.idDoEstadoPagamento = idDoEstadoPagamento;
+	/** @param estadoDePagamento the EstadoDePagamento with the id to set */
+	public void setIdDoEstadoPagamento(EstadoDePagamento estadoDePagamento) {
+		this.idDoEstadoPagamento = estadoDePagamento.getId();
 	}
 
 	/** @return the pedido */
