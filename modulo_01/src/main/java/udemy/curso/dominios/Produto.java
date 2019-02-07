@@ -4,7 +4,9 @@
 package udemy.curso.dominios;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -39,6 +42,9 @@ public class Produto implements Serializable {
 			inverseJoinColumns = {
 					@JoinColumn(name = "CATEGORIA_ID") })
 	private Set<Categoria> categorias = new HashSet<>();
+
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ProdutoPedido> produtosPedidos = new HashSet<>();
 
 	/** Construtor padrão. */
 	public Produto() {
@@ -84,6 +90,18 @@ public class Produto implements Serializable {
 		return true;
 	}
 
+	/** @return os pedidos deste produto. */
+	public List<Pedido> getPedidos() {
+
+		List<Pedido> pedidos = new ArrayList<>();
+
+		for (ProdutoPedido produtoPedido : this.produtosPedidos) {
+			pedidos.add(produtoPedido.getId().getPedido());
+		}
+
+		return pedidos;
+	}
+
 	/** @return the id */
 	public Integer getId() {
 		return id;
@@ -122,6 +140,16 @@ public class Produto implements Serializable {
 	/** @param categorias the categorias to set */
 	public void setCategorias(Set<Categoria> categorias) {
 		this.categorias = categorias;
+	}
+
+	/** @return the produtosPedidos */
+	public Set<ProdutoPedido> getProdutosPedidos() {
+		return produtosPedidos;
+	}
+
+	/** @param produtosPedidos the produtosPedidos to set */
+	public void setProdutosPedidos(Set<ProdutoPedido> produtosPedidos) {
+		this.produtosPedidos = produtosPedidos;
 	}
 
 }

@@ -20,6 +20,7 @@ import udemy.curso.dominios.PagamentoComBoleto;
 import udemy.curso.dominios.PagamentoComCartao;
 import udemy.curso.dominios.Pedido;
 import udemy.curso.dominios.Produto;
+import udemy.curso.dominios.ProdutoPedido;
 import udemy.curso.dominios.enums.EstadoDePagamento;
 import udemy.curso.dominios.enums.TipoCliente;
 import udemy.curso.repositorios.RepositorioDeCategoria;
@@ -30,6 +31,7 @@ import udemy.curso.repositorios.RepositorioDeEstado;
 import udemy.curso.repositorios.RepositorioDePagamento;
 import udemy.curso.repositorios.RepositorioDePedido;
 import udemy.curso.repositorios.RepositorioDeProduto;
+import udemy.curso.repositorios.RepositorioDeProdutoPedido;
 
 /** Aplicacao */
 @SpringBootApplication
@@ -58,6 +60,9 @@ public class Aplicacao implements CommandLineRunner {
 
 	@Autowired
 	private RepositorioDePagamento repositorioDePagamento;
+
+	@Autowired
+	private RepositorioDeProdutoPedido repositorioDeProdutoPedido;
 
 	/** @param args */
 	public static void main(String[] args) {
@@ -169,6 +174,32 @@ public class Aplicacao implements CommandLineRunner {
 		repositorioDePedido.saveAll(Arrays.asList(
 				pedido1,
 				pedido2));
+
+		ProdutoPedido produtoPedido1 = new ProdutoPedido(
+				produto1,
+				pedido1,
+				2000.00,
+				0.00,
+				1);
+
+		ProdutoPedido produtoPedido2 = new ProdutoPedido(
+				produto3,
+				pedido1,
+				80.00,
+				0.00,
+				2);
+
+		ProdutoPedido produtoPedido3 = new ProdutoPedido(
+				produto2,
+				pedido2,
+				800.00,
+				100.00,
+				1);
+
+		repositorioDeProdutoPedido.saveAll(Arrays.asList(
+				produtoPedido1,
+				produtoPedido2,
+				produtoPedido3));
 
 		return this;
 	}
