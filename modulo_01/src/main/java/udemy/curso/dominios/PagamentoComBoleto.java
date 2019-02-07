@@ -7,6 +7,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import udemy.curso.dominios.enums.EstadoDePagamento;
 
 /** Especialização do domínio Pagamento. */
@@ -15,8 +17,10 @@ public class PagamentoComBoleto extends Pagamento {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate vencimento;
 
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate realizacao;
 
 	/** Construtor padrão. */

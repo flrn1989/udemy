@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /** Domínio para Pedido */
@@ -31,8 +32,10 @@ public class Pedido implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime instante;
 
+	@JsonManagedReference
 	@OneToOne
 	private Pagamento pagamento;
 
@@ -45,6 +48,7 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "ENDERECO_DE_ENTREGA_ID")
 	private Endereco enderecoDeEntrega;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "id.pedido")
 	private Set<ProdutoPedido> produtosPedidos = new HashSet<>();
 

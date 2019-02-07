@@ -9,6 +9,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import udemy.curso.dominios.Pedido;
 import udemy.curso.dominios.Produto;
 
@@ -18,10 +21,12 @@ public final class ProdutoPedidoId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "PRODUTO_ID")
 	private Produto produto;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "PEDIDO_ID")
 	private Pedido pedido;

@@ -20,7 +20,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import udemy.curso.dominios.enums.TipoCliente;
 import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
@@ -165,8 +167,10 @@ public class Cliente implements Serializable {
 	}
 
 	/** @return the tipoCliente */
-	public TipoCliente getTipoCliente() {
-		return (TipoCliente) new ExtratoraDeEnumIdentificavel(TipoCliente.values()).de(this.idDoTipoCliente);
+	public String getTipoCliente() {
+		return ((TipoCliente) new ExtratoraDeEnumIdentificavel(TipoCliente.values())
+				.de(this.idDoTipoCliente))
+						.getDescricao();
 	}
 
 	/** @param tipoCliente the tipoCliente to set */
