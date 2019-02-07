@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /** Classe de domínio de Categoria. */
 @Entity
@@ -27,7 +27,7 @@ public class Categoria implements Serializable {
 
 	private String nome;
 
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany(mappedBy = "categorias")
 	private Set<Produto> produtos = new HashSet<>();
 

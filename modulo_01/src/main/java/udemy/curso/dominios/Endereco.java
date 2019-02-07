@@ -12,8 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /** Domínio do Endereço. */
 @Entity
@@ -35,12 +34,11 @@ public class Endereco implements Serializable {
 
 	private String cep;
 
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "CIDADE_ID")
 	private Cidade cidade;
 
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "CLIENTE_ID")
 	private Cliente cliente;

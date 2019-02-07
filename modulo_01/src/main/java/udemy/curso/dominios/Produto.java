@@ -18,9 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /** Classe para o domínio Produto. */
 @Entity
@@ -36,7 +34,6 @@ public class Produto implements Serializable {
 
 	private Double preco;
 
-	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 			joinColumns = {
@@ -45,7 +42,7 @@ public class Produto implements Serializable {
 					@JoinColumn(name = "CATEGORIA_ID") })
 	private Set<Categoria> categorias = new HashSet<>();
 
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto")
 	private Set<ProdutoPedido> produtosPedidos = new HashSet<>();
 
