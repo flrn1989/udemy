@@ -3,7 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,9 +20,11 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import udemy.curso.interfaces.Dominio;
+
 /** Domínio para Pedido */
 @Entity
-public class Pedido implements Serializable {
+public class Pedido implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

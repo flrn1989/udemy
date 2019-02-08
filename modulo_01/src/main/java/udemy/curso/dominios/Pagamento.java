@@ -3,8 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +16,13 @@ import javax.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import udemy.curso.dominios.enums.EstadoDePagamento;
+import udemy.curso.interfaces.Dominio;
 import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
 
 /** Domínio de Pagamento. */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pagamento implements Serializable {
+public abstract class Pagamento implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

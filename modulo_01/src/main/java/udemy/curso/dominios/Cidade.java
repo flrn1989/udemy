@@ -3,7 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +16,11 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.Dominio;
+
 /** Domínio de Cidade. */
 @Entity
-public class Cidade implements Serializable {
+public class Cidade implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

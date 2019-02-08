@@ -3,7 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +14,11 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.Dominio;
+
 /** Domínio de Estado. */
 @Entity
-public class Estado implements Serializable {
+public class Estado implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

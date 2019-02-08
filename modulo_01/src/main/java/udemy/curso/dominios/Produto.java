@@ -3,7 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,9 +19,11 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.Dominio;
+
 /** Classe para o domínio Produto. */
 @Entity
-public class Produto implements Serializable {
+public class Produto implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

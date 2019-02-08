@@ -3,8 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +12,11 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.Dominio;
+
 /** Domínio do Endereço. */
 @Entity
-public class Endereco implements Serializable {
+public class Endereco implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 

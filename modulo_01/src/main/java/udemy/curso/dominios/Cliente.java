@@ -3,7 +3,6 @@
  */
 package udemy.curso.dominios;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +21,12 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import udemy.curso.dominios.enums.TipoCliente;
+import udemy.curso.interfaces.Dominio;
 import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
 
 /** Domínio de Cliente. */
 @Entity
-public class Cliente implements Serializable {
+public class Cliente implements Dominio {
 
 	private static final long serialVersionUID = 1L;
 
