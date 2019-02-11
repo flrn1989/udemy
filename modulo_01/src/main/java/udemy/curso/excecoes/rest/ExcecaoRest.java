@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.excecoes;
+package udemy.curso.excecoes.rest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

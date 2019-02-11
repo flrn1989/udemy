@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import udemy.curso.excecoes.ExcecaoRest;
+import udemy.curso.excecoes.rest.ExcecaoRest;
 
 /** ManuseadorDeExcecoes */
 @ControllerAdvice

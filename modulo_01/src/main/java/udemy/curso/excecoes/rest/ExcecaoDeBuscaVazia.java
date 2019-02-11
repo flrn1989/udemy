@@ -1,7 +1,7 @@
 /**
  * 
  */
-package udemy.curso.excecoes;
+package udemy.curso.excecoes.rest;
 
 import org.springframework.http.HttpStatus;
 
