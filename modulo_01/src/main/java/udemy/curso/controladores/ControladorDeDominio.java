@@ -40,6 +40,15 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
 		return ResponseEntity.created(location).build();
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> salvar(@RequestBody TipoDoDominio dominio,
+			@PathVariable Integer id) {
+
+		dominio.setId(id);
+		repositorio.save(dominio);
+		return ResponseEntity.noContent().build();
+	}
+
 	/** @return Listagem de todos os domínios encontrados. */
 	@RequestMapping(method = RequestMethod.GET)
 	public List<TipoDoDominio> listarTodos() {
