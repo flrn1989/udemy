@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Domínio do Endereço. */
@@ -60,6 +61,13 @@ public class Endereco implements Dominio {
 		this.bairro = bairro;
 		this.cep = cep;
 		this.cidade = cidade;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** {@inheritDoc} */

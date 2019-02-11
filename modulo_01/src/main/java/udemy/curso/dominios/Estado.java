@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Domínio de Estado. */
@@ -39,6 +40,13 @@ public class Estado implements Dominio {
 	/** @param nome */
 	public Estado(String nome) {
 		this.nome = nome;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** @return the id */

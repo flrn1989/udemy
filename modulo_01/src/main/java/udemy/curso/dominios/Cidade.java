@@ -16,6 +16,7 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Domínio de Cidade. */
@@ -48,6 +49,13 @@ public class Cidade implements Dominio {
 		this.nome = nome;
 		this.estado = estado;
 		estado.getCidades().add(this);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** {@inheritDoc} */

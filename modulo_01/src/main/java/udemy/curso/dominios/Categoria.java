@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.dto.CategoriaDTO;
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Classe de domínio de Categoria. */
@@ -39,6 +41,12 @@ public class Categoria implements Dominio {
 	/** @param nome */
 	public Categoria(String nome) {
 		this.nome = nome;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		return new CategoriaDTO(this);
 	}
 
 	/** {@inheritDoc} */

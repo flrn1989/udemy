@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import udemy.curso.dominios.enums.EstadoDePagamento;
+import udemy.curso.interfaces.DTO;
 
 /** Especialização do domínio Pagamento. */
 @Entity
@@ -37,6 +38,13 @@ public class PagamentoComBoleto extends Pagamento {
 		super(estadoPagamento, pedido);
 		this.vencimento = vencimento;
 		this.realizacao = realizacao;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** @return the vencimento */

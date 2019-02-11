@@ -6,6 +6,7 @@ package udemy.curso.dominios;
 import javax.persistence.Entity;
 
 import udemy.curso.dominios.enums.EstadoDePagamento;
+import udemy.curso.interfaces.DTO;
 
 /** Especialização do domínio Pagamento. */
 @Entity
@@ -26,6 +27,13 @@ public class PagamentoComCartao extends Pagamento {
 			Integer numeroDeParcelas) {
 		super(estadoPagamento, pedido);
 		this.numeroDeParcelas = numeroDeParcelas;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** @return the numeroDeParcelas */

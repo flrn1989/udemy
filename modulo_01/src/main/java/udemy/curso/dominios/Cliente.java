@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import udemy.curso.dominios.enums.TipoCliente;
+import udemy.curso.dto.ClienteDTO;
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
 
@@ -72,6 +74,12 @@ public class Cliente implements Dominio {
 		this.idDoTipoCliente = (Optional.ofNullable(tipo)
 				.orElseThrow(() -> new IllegalArgumentException("O tipo do cliente não pode ser nulo.")))
 						.getId();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		return new ClienteDTO(this);
 	}
 
 	/** {@inheritDoc} */

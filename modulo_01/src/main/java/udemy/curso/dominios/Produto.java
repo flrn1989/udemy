@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.dto.ProdutoDTO;
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Classe para o domínio Produto. */
@@ -56,6 +58,12 @@ public class Produto implements Dominio {
 	public Produto(String nome, Double preco) {
 		this.nome = nome;
 		this.preco = preco;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		return new ProdutoDTO(this);
 	}
 
 	/** {@inheritDoc} */

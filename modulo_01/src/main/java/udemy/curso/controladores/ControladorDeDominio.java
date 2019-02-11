@@ -5,6 +5,7 @@ package udemy.curso.controladores;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,10 +57,13 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
 		return ResponseEntity.noContent().build();
 	}
 
-	/** @return Listagem de todos os domínios encontrados. */
+	/** @return Listagem dos DTOs de todos os domínios encontrados. */
 	@RequestMapping(method = RequestMethod.GET)
-	public List<TipoDoDominio> listarTodos() {
-		return repositorio.findAll();
+	public List<?> listarTodos() {
+		return repositorio.findAll()
+				.stream()
+				.map(obj -> obj.paraDTO())
+				.collect(Collectors.toList());
 	}
 
 	/** @param id

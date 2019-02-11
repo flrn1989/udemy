@@ -20,6 +20,8 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import udemy.curso.dto.PedidoDTO;
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Domínio para Pedido */
@@ -64,6 +66,12 @@ public class Pedido implements Dominio {
 		if (this.cliente != null) {
 			this.cliente.getPedidos().add(this);
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DTO paraDTO() {
+		return new PedidoDTO(this);
 	}
 
 	/** {@inheritDoc} */
