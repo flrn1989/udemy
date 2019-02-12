@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -23,20 +25,24 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import udemy.curso.excecoes.rest.ExcecaoDeBuscaVazia;
 import udemy.curso.excecoes.rest.ExcecaoDeIntegridadeDeDados;
+import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
 /** Controlador abstrato para os demais controladores de domínio. */
-public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
+public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDoDTO extends DTO<TipoDoDominio>> {
 
 	@Autowired
 	private JpaRepository<TipoDoDominio, Integer> repositorio;
 
-	/** @param dominio
-	 * @return Domínio salvo. */
+	/** @param dto
+	 * @return Response sem conteúdo. */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> salvar(@RequestBody TipoDoDominio dominio) {
+	public ResponseEntity<Void> salvar(@Valid @RequestBody TipoDoDTO dto) {
+
+		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio();
 
 		dominio.setId(null);
+
 		dominio = repositorio.save(dominio);
 
 		URI location = ServletUriComponentsBuilder
@@ -48,16 +54,21 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
 		return ResponseEntity.created(location).build();
 	}
 
-	/** @param dominio
+	/** @param dto
 	 * @param id
 	 * @return Response sem conteúdo. */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> salvar(@RequestBody TipoDoDominio dominio,
+	public ResponseEntity<Void> salvar(
+			@Valid @RequestBody TipoDoDTO dto,
 			@PathVariable Integer id) {
+
+		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio();
 
 		this.obterPorId(id);
 		dominio.setId(id);
+
 		repositorio.save(dominio);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -77,10 +88,17 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
 	 * @return Listagem dos DTOs dos domínios paginados. */
 	@RequestMapping(method = RequestMethod.GET, value = "/paginacao")
 	public Page<?> listarPorPagina(
-			@RequestParam(value = "pag", defaultValue = "0") Integer pagina,
-			@RequestParam(value = "qtd", defaultValue = "3") Integer quantidadePorPagina,
-			@RequestParam(value = "dir", defaultValue = "asc") String ordenacao,
-			@RequestParam(value = "prp", defaultValue = "id") String... propriedadesOrdenadoras) {
+			@RequestParam(value = "pag",
+					defaultValue = "0") Integer pagina,
+
+			@RequestParam(value = "qtd",
+					defaultValue = "3") Integer quantidadePorPagina,
+
+			@RequestParam(value = "dir",
+					defaultValue = "asc") String ordenacao,
+
+			@RequestParam(value = "prp",
+					defaultValue = "id") String... propriedadesOrdenadoras) {
 
 		PageRequest paginavel = PageRequest.of(
 				pagina,

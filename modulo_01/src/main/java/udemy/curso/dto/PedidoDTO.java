@@ -11,7 +11,7 @@ import udemy.curso.dominios.Pedido;
 import udemy.curso.interfaces.DTO;
 
 /** DTO de Pedido. */
-public class PedidoDTO implements DTO {
+public class PedidoDTO implements DTO<Pedido> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +28,12 @@ public class PedidoDTO implements DTO {
 	public PedidoDTO(Pedido pedido) {
 		this.id = pedido.getId();
 		this.instante = pedido.getInstante();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Pedido paraDominio() {
+		return new Pedido(this);
 	}
 
 	/** @return the id */

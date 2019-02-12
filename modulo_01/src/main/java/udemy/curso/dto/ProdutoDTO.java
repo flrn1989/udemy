@@ -11,7 +11,7 @@ import udemy.curso.dominios.Produto;
 import udemy.curso.interfaces.DTO;
 
 /** DTO de Produto; */
-public class ProdutoDTO implements DTO {
+public class ProdutoDTO implements DTO<Produto> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +33,12 @@ public class ProdutoDTO implements DTO {
 		this.nome = produto.getNome();
 		this.preco = produto.getPreco();
 		this.categorias = produto.getCategorias();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Produto paraDominio() {
+		return new Produto(this);
 	}
 
 	/** @return the id */

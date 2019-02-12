@@ -60,6 +60,14 @@ public class Produto implements Dominio {
 		this.preco = preco;
 	}
 
+	/** @param dto */
+	public Produto(ProdutoDTO dto) {
+		this.id = dto.getId();
+		this.nome = dto.getNome();
+		this.preco = dto.getPreco();
+		this.categorias = dto.getCategorias();
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO paraDTO() {

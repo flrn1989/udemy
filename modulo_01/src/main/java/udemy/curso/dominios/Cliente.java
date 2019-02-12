@@ -76,6 +76,15 @@ public class Cliente implements Dominio {
 						.getId();
 	}
 
+	/** @param dto */
+	public Cliente(ClienteDTO dto) {
+		this.id = dto.getId();
+		this.nome = dto.getNome();
+		this.email = dto.getEmail();
+		this.numeroDoDocumento = dto.getNumeroDoDocumento();
+		this.idDoTipoCliente = TipoCliente.valueOf(dto.getTipoCliente()).getId();
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO paraDTO() {

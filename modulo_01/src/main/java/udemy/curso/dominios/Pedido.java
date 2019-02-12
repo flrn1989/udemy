@@ -68,6 +68,12 @@ public class Pedido implements Dominio {
 		}
 	}
 
+	/** @param dto */
+	public Pedido(PedidoDTO dto) {
+		this.id = dto.getId();
+		this.instante = dto.getInstante();
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO paraDTO() {

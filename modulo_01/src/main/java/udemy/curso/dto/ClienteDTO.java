@@ -7,7 +7,7 @@ import udemy.curso.dominios.Cliente;
 import udemy.curso.interfaces.DTO;
 
 /** DTO de Cliente. */
-public class ClienteDTO implements DTO {
+public class ClienteDTO implements DTO<Cliente> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +32,12 @@ public class ClienteDTO implements DTO {
 		this.email = cliente.getEmail();
 		this.numeroDoDocumento = cliente.getNumeroDoDocumento();
 		this.tipoCliente = cliente.getTipoCliente();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Cliente paraDominio() {
+		return new Cliente(this);
 	}
 
 	/** @return the id */

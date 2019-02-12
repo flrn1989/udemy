@@ -43,6 +43,12 @@ public class Categoria implements Dominio {
 		this.nome = nome;
 	}
 
+	/** @param dto */
+	public Categoria(CategoriaDTO dto) {
+		this.id = dto.getId();
+		this.nome = dto.getNome();
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO paraDTO() {
