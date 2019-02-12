@@ -80,6 +80,10 @@ public class Aplicacao implements CommandLineRunner {
 		Categoria categoria1 = new Categoria("Militar");
 		Categoria categoria2 = new Categoria("Policial");
 		Categoria categoria3 = new Categoria("Direito");
+		Categoria categoria4 = new Categoria("Enfermagem");
+		Categoria categoria5 = new Categoria("Elétrica");
+		Categoria categoria6 = new Categoria("Tecnologia");
+		Categoria categoria7 = new Categoria("Mecânica");
 
 		Produto produto1 = new Produto("Vade Mecum", 30.00);
 		Produto produto2 = new Produto("Algemas", 20.00);
@@ -97,7 +101,11 @@ public class Aplicacao implements CommandLineRunner {
 		repositorioDeCategoria.saveAll(Arrays.asList(
 				categoria1,
 				categoria2,
-				categoria3));
+				categoria3,
+				categoria4,
+				categoria5,
+				categoria6,
+				categoria7));
 
 		repositorioDeProduto.saveAll(Arrays.asList(
 				produto1,

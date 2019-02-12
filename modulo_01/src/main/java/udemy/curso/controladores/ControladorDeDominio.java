@@ -9,12 +9,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import udemy.curso.excecoes.rest.ExcecaoDeBuscaVazia;
@@ -64,6 +68,27 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio> {
 				.stream()
 				.map(obj -> obj.paraDTO())
 				.collect(Collectors.toList());
+	}
+
+	/** @param pagina
+	 * @param quantidadePorPagina
+	 * @param ordenacao
+	 * @param propriedadesOrdenadoras
+	 * @return Listagem dos DTOs dos domínios paginados. */
+	@RequestMapping(method = RequestMethod.GET, value = "/paginacao")
+	public Page<?> listarPorPagina(
+			@RequestParam(value = "pag", defaultValue = "0") Integer pagina,
+			@RequestParam(value = "qtd", defaultValue = "3") Integer quantidadePorPagina,
+			@RequestParam(value = "dir", defaultValue = "asc") String ordenacao,
+			@RequestParam(value = "prp", defaultValue = "id") String... propriedadesOrdenadoras) {
+
+		PageRequest paginavel = PageRequest.of(
+				pagina,
+				quantidadePorPagina,
+				Direction.fromOptionalString(ordenacao).orElse(Direction.ASC),
+				propriedadesOrdenadoras);
+
+		return repositorio.findAll(paginavel).map(obj -> obj.paraDTO());
 	}
 
 	/** @param id
