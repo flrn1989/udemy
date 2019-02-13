@@ -18,8 +18,8 @@ public class ExcecaoDeBuscaVazia extends ExcecaoRest {
 
 	/** {@inheritDoc} */
 	@Override
-	public HttpStatus httpStatus() {
-		return HttpStatus.NOT_FOUND;
+	public int httpStatus() {
+		return HttpStatus.NOT_FOUND.value();
 	}
 
 }

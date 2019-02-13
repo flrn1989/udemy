@@ -18,8 +18,8 @@ public class ExcecaoDeIntegridadeDeDados extends ExcecaoRest {
 	}
 
 	@Override
-	public HttpStatus httpStatus() {
-		return HttpStatus.BAD_REQUEST;
+	public int httpStatus() {
+		return HttpStatus.BAD_REQUEST.value();
 	}
 
 	@Override
