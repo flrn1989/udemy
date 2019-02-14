@@ -44,7 +44,7 @@ public class Estado implements Dominio {
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<Estado> paraDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

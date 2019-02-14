@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import udemy.curso.dominios.enums.EstadoDePagamento;
 import udemy.curso.interfaces.Dominio;
-import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
+import udemy.curso.util.ExtratoraDeEnum;
 
 /** Domínio de Pagamento. */
 @Entity
@@ -97,9 +97,9 @@ public abstract class Pagamento implements Dominio {
 
 	/** @return the EstadoDePagamento */
 	public EstadoDePagamento getIdDoEstadoPagamento() {
-		return (EstadoDePagamento) new ExtratoraDeEnumIdentificavel(
-				EstadoDePagamento.values())
-						.de(idDoEstadoPagamento);
+		return (EstadoDePagamento) ExtratoraDeEnum
+				.extrairDe(EstadoDePagamento.values())
+				.valorCom(idDoEstadoPagamento);
 	}
 
 	/** @param estadoDePagamento the EstadoDePagamento with the id to set */

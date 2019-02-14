@@ -24,7 +24,7 @@ import udemy.curso.dominios.enums.TipoCliente;
 import udemy.curso.dto.ClienteDTO;
 import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
-import udemy.curso.recursos.ExtratoraDeEnumIdentificavel;
+import udemy.curso.util.ExtratoraDeEnum;
 
 /** Domínio de Cliente. */
 @Entity
@@ -78,16 +78,19 @@ public class Cliente implements Dominio {
 
 	/** @param dto */
 	public Cliente(ClienteDTO dto) {
-		this.id = dto.getId();
 		this.nome = dto.getNome();
 		this.email = dto.getEmail();
 		this.numeroDoDocumento = dto.getNumeroDoDocumento();
-		this.idDoTipoCliente = TipoCliente.valueOf(dto.getTipoCliente()).getId();
+
+		this.idDoTipoCliente = ExtratoraDeEnum
+				.extrairDe(TipoCliente.values())
+				.valorCom(dto.getTipoCliente())
+				.getId();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<Cliente> paraDTO() {
 		return new ClienteDTO(this);
 	}
 
@@ -181,9 +184,10 @@ public class Cliente implements Dominio {
 
 	/** @return the tipoCliente */
 	public String getTipoCliente() {
-		return ((TipoCliente) new ExtratoraDeEnumIdentificavel(TipoCliente.values())
-				.de(this.idDoTipoCliente))
-						.getDescricao();
+		return ExtratoraDeEnum
+				.extrairDe(TipoCliente.values())
+				.valorCom(this.idDoTipoCliente)
+				.getDescricao();
 	}
 
 	/** @param tipoCliente the tipoCliente to set */
@@ -192,6 +196,20 @@ public class Cliente implements Dominio {
 		this.idDoTipoCliente = (Optional.ofNullable(tipoCliente)
 				.orElseThrow(() -> new IllegalArgumentException("O tipo do cliente não pode ser nulo.")))
 						.getId();
+	}
+
+	/** @param descricaoDoTipoCliente to set */
+	public void setTipoCliente(String descricaoDoTipoCliente) {
+
+		this.idDoTipoCliente = ((TipoCliente) ExtratoraDeEnum
+				.extrairDe(TipoCliente.values())
+				.valorCom(descricaoDoTipoCliente))
+						.getId();
+	}
+
+	/** @param idDoTipoCliente to set */
+	public void setTipoCliente(Integer idDoTipoCliente) {
+		this.idDoTipoCliente = idDoTipoCliente;
 	}
 
 	/** @return the telefones */

@@ -42,7 +42,7 @@ public class PagamentoComBoleto extends Pagamento {
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<PagamentoComBoleto> paraDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

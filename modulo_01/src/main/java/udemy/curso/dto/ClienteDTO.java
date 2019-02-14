@@ -3,6 +3,13 @@
  */
 package udemy.curso.dto;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import udemy.curso.dominios.Cliente;
 import udemy.curso.interfaces.DTO;
 
@@ -11,10 +18,12 @@ public class ClienteDTO implements DTO<Cliente> {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-
+	@NotEmpty(message = "Preenchimento obrigatório.")
+	@Size(min = 8, max = 160)
 	private String nome;
 
+	@NotEmpty(message = "Preenchimento obrigatório.")
+	@Email
 	private String email;
 
 	private String numeroDoDocumento;
@@ -27,7 +36,6 @@ public class ClienteDTO implements DTO<Cliente> {
 
 	/** Construtor pelo domínio. */
 	public ClienteDTO(Cliente cliente) {
-		this.id = cliente.getId();
 		this.nome = cliente.getNome();
 		this.email = cliente.getEmail();
 		this.numeroDoDocumento = cliente.getNumeroDoDocumento();
@@ -40,14 +48,27 @@ public class ClienteDTO implements DTO<Cliente> {
 		return new Cliente(this);
 	}
 
-	/** @return the id */
-	public Integer getId() {
-		return id;
-	}
+	/** {@inheritDoc} */
+	@Override
+	public Cliente paraDominio(Cliente dominio) {
 
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
+		if (Objects.isNull(dominio)) {
+			return paraDominio();
+		}
+
+		dominio.setEmail(Optional.ofNullable(this.getEmail())
+				.orElse(dominio.getEmail()));
+
+		dominio.setNome(Optional.ofNullable(this.getNome())
+				.orElse(dominio.getNome()));
+
+		dominio.setNumeroDoDocumento(Optional.ofNullable(this.getNumeroDoDocumento())
+				.orElse(dominio.getNumeroDoDocumento()));
+
+		dominio.setTipoCliente(Optional.of(this.getTipoCliente())
+				.orElse(dominio.getTipoCliente()));
+
+		return dominio;
 	}
 
 	/** @return the nome */

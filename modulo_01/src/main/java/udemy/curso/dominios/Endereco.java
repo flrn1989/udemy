@@ -62,10 +62,10 @@ public class Endereco implements Dominio {
 		this.cep = cep;
 		this.cidade = cidade;
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<Endereco> paraDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -31,7 +31,7 @@ public class PagamentoComCartao extends Pagamento {
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<PagamentoComCartao> paraDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

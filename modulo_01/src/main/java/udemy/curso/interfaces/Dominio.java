@@ -14,6 +14,6 @@ public interface Dominio extends Identificavel, Serializable {
 	void setId(Integer id);
 
 	/** @return instância de DTO do domínio. */
-	DTO paraDTO();
+	DTO<? extends Dominio> paraDTO();
 
 }

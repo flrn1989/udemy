@@ -62,7 +62,6 @@ public class Produto implements Dominio {
 
 	/** @param dto */
 	public Produto(ProdutoDTO dto) {
-		this.id = dto.getId();
 		this.nome = dto.getNome();
 		this.preco = dto.getPreco();
 		this.categorias = dto.getCategorias();
@@ -70,7 +69,7 @@ public class Produto implements Dominio {
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<Produto> paraDTO() {
 		return new ProdutoDTO(this);
 	}
 

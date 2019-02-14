@@ -3,6 +3,9 @@
  */
 package udemy.curso.dto;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -13,8 +16,6 @@ import udemy.curso.interfaces.DTO;
 public final class CategoriaDTO implements DTO<Categoria> {
 
 	private static final long serialVersionUID = 1L;
-
-	private Integer id;
 
 	@NotEmpty(message = "A Categoria deve possuir um nome.")
 	@Size(min = 4,
@@ -28,7 +29,6 @@ public final class CategoriaDTO implements DTO<Categoria> {
 
 	/** Construtor a partir do domínio. */
 	public CategoriaDTO(Categoria categoria) {
-		this.id = categoria.getId();
 		this.nome = categoria.getNome();
 	}
 
@@ -40,8 +40,16 @@ public final class CategoriaDTO implements DTO<Categoria> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Integer getId() {
-		return id;
+	public Categoria paraDominio(Categoria dominio) {
+
+		if (Objects.isNull(dominio)) {
+			return paraDominio();
+		}
+
+		dominio.setNome(Optional.ofNullable(this.getNome())
+				.orElse(dominio.getNome()));
+
+		return dominio;
 	}
 
 	/** @return the nome */
@@ -52,11 +60,6 @@ public final class CategoriaDTO implements DTO<Categoria> {
 	/** @param nome the nome to set */
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 }

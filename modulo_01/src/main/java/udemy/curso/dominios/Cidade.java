@@ -53,7 +53,7 @@ public class Cidade implements Dominio {
 
 	/** {@inheritDoc} */
 	@Override
-	public DTO paraDTO() {
+	public DTO<Cidade> paraDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -4,6 +4,8 @@
 package udemy.curso.dto;
 
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import udemy.curso.dominios.Categoria;
@@ -14,8 +16,6 @@ import udemy.curso.interfaces.DTO;
 public class ProdutoDTO implements DTO<Produto> {
 
 	private static final long serialVersionUID = 1L;
-
-	private Integer id;
 
 	private String nome;
 
@@ -29,7 +29,6 @@ public class ProdutoDTO implements DTO<Produto> {
 
 	/** Construtor do domínio. */
 	public ProdutoDTO(Produto produto) {
-		this.id = produto.getId();
 		this.nome = produto.getNome();
 		this.preco = produto.getPreco();
 		this.categorias = produto.getCategorias();
@@ -41,14 +40,25 @@ public class ProdutoDTO implements DTO<Produto> {
 		return new Produto(this);
 	}
 
-	/** @return the id */
-	public Integer getId() {
-		return id;
-	}
+	/** {@inheritDoc} */
+	@Override
+	public Produto paraDominio(Produto dominio) {
 
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
+		if (Objects.isNull(dominio)) {
+			return paraDominio();
+		}
+
+		dominio.setNome(Optional.ofNullable(this.getNome())
+				.orElse(dominio.getNome()));
+
+		dominio.setPreco(Optional.ofNullable(this.getPreco())
+				.orElse(dominio.getPreco()));
+
+		dominio.setCategorias(Optional.ofNullable(this.categorias)
+				.filter(c -> !c.isEmpty())
+				.orElse(dominio.getCategorias()));
+
+		return dominio;
 	}
 
 	/** @return the nome */

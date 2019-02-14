@@ -62,10 +62,9 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDo
 			@Valid @RequestBody TipoDoDTO dto,
 			@PathVariable Integer id) {
 
-		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio();
-
-		this.obterPorId(id);
-		dominio.setId(id);
+		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio(
+				this.obterPorId(id)
+						.getBody());
 
 		repositorio.save(dominio);
 

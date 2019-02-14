@@ -4,6 +4,8 @@
 package udemy.curso.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,8 +17,6 @@ public class PedidoDTO implements DTO<Pedido> {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime instante;
 
@@ -26,7 +26,6 @@ public class PedidoDTO implements DTO<Pedido> {
 
 	/** Construtor. */
 	public PedidoDTO(Pedido pedido) {
-		this.id = pedido.getId();
 		this.instante = pedido.getInstante();
 	}
 
@@ -36,14 +35,18 @@ public class PedidoDTO implements DTO<Pedido> {
 		return new Pedido(this);
 	}
 
-	/** @return the id */
-	public Integer getId() {
-		return id;
-	}
+	/** {@inheritDoc} */
+	@Override
+	public Pedido paraDominio(Pedido dominio) {
 
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
+		if (Objects.isNull(dominio)) {
+			return paraDominio();
+		}
+
+		dominio.setInstante(Optional.ofNullable(this.getInstante())
+				.orElse(dominio.getInstante()));
+
+		return dominio;
 	}
 
 	/** @return the instante */
