@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,18 +33,17 @@ import udemy.curso.interfaces.Dominio;
 public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDoDTO extends DTO<TipoDoDominio>> {
 
 	@Autowired
-	private JpaRepository<TipoDoDominio, Integer> repositorio;
+	protected JpaRepository<TipoDoDominio, Integer> repositorio;
 
 	/** @param dto
 	 * @return Response sem conteúdo. */
 	@RequestMapping(method = RequestMethod.POST)
+	@Transactional
 	public ResponseEntity<Void> salvar(@Valid @RequestBody TipoDoDTO dto) {
 
 		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio();
 
-		dominio.setId(null);
-
-		dominio = repositorio.save(dominio);
+		prepararCriacao(dominio);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -54,10 +54,24 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDo
 		return ResponseEntity.created(location).build();
 	}
 
+	/** @param dominio
+	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
+	 *         antes da criação. */
+	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararCriacao(
+			TipoDoDominio dominio) {
+
+		dominio.setId(null);
+
+		dominio = repositorio.save(dominio);
+
+		return this;
+	}
+
 	/** @param dto
 	 * @param id
 	 * @return Response sem conteúdo. */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@Transactional
 	public ResponseEntity<Void> salvar(
 			@Valid @RequestBody TipoDoDTO dto,
 			@PathVariable Integer id) {
@@ -66,9 +80,22 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDo
 				this.obterPorId(id)
 						.getBody());
 
-		repositorio.save(dominio);
+		prepararAtualizacao(dominio, id);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	/** @param dominio
+	 * @param id
+	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
+	 *         antes da atualização. */
+	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararAtualizacao(
+			TipoDoDominio dominio,
+			Integer id) {
+
+		repositorio.save(dominio);
+
+		return this;
 	}
 
 	/** @return Listagem dos DTOs de todos os domínios encontrados. */
@@ -125,19 +152,30 @@ public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDo
 	 *                                     por possuir vínculos no banco de
 	 *                                     dados. */
 	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
+	@Transactional
 	public ResponseEntity<Void> deletarPorId(@PathVariable Integer id)
 			throws Throwable {
 
 		this.obterPorId(id);
 
 		try {
-			repositorio.deleteById(id);
+			prepararDelecao(id);
 
 		} catch (DataIntegrityViolationException e) {
 			throw new ExcecaoDeIntegridadeDeDados(e);
 		}
 
 		return ResponseEntity.noContent().build();
+	}
+
+	/** @param id
+	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
+	 *         antes da deleção. */
+	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararDelecao(Integer id) {
+
+		repositorio.deleteById(id);
+
+		return this;
 	}
 
 }

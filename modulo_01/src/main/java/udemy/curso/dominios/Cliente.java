@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -81,11 +82,17 @@ public class Cliente implements Dominio {
 		this.nome = dto.getNome();
 		this.email = dto.getEmail();
 		this.numeroDoDocumento = dto.getNumeroDoDocumento();
+		this.telefones = dto.getTelefones();
 
 		this.idDoTipoCliente = ExtratoraDeEnum
 				.extrairDe(TipoCliente.values())
 				.valorCom(dto.getTipoCliente())
 				.getId();
+
+		this.enderecos = dto.getEnderecos()
+				.stream()
+				.map(e -> new Endereco(e))
+				.collect(Collectors.toSet());
 	}
 
 	/** {@inheritDoc} */

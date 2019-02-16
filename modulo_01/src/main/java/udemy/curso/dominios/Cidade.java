@@ -51,6 +51,11 @@ public class Cidade implements Dominio {
 		estado.getCidades().add(this);
 	}
 
+	/** @param id */
+	public Cidade(Integer id) {
+		this.id = id;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO<Cidade> paraDTO() {

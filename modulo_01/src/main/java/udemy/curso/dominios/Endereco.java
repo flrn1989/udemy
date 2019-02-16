@@ -3,6 +3,8 @@
  */
 package udemy.curso.dominios;
 
+import java.util.Optional;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import udemy.curso.dto.EnderecoDTO;
 import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
@@ -63,11 +66,28 @@ public class Endereco implements Dominio {
 		this.cidade = cidade;
 	}
 
+	/** @param endereco
+	 * @param cidade */
+	public Endereco(EnderecoDTO endereco, Cidade cidade) {
+		this.logradouro = endereco.getLogradouro();
+		this.numero = endereco.getNumero();
+		this.complemento = endereco.getComplemento();
+		this.bairro = endereco.getBairro();
+		this.cep = endereco.getCep();
+
+		this.cidade = Optional.ofNullable(cidade)
+				.orElseGet(() -> new Cidade(endereco.getIdCidade()));
+	}
+
+	/** @param endereco */
+	public Endereco(EnderecoDTO endereco) {
+		this(endereco, null);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public DTO<Endereco> paraDTO() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EnderecoDTO(this);
 	}
 
 	/** {@inheritDoc} */

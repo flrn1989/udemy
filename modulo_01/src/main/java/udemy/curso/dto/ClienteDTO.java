@@ -3,14 +3,18 @@
  */
 package udemy.curso.dto;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import udemy.curso.dominios.Cliente;
+import udemy.curso.dominios.Endereco;
 import udemy.curso.interfaces.DTO;
 
 /** DTO de Cliente. */
@@ -30,6 +34,10 @@ public class ClienteDTO implements DTO<Cliente> {
 
 	private String tipoCliente;
 
+	private Set<EnderecoDTO> enderecos = new HashSet<>();
+
+	private Set<String> telefones = new HashSet<>();
+
 	/** Construtor. */
 	public ClienteDTO() {
 	}
@@ -40,6 +48,12 @@ public class ClienteDTO implements DTO<Cliente> {
 		this.email = cliente.getEmail();
 		this.numeroDoDocumento = cliente.getNumeroDoDocumento();
 		this.tipoCliente = cliente.getTipoCliente();
+		this.telefones = cliente.getTelefones();
+
+		this.enderecos = cliente.getEnderecos()
+				.stream()
+				.map(e -> new EnderecoDTO(e))
+				.collect(Collectors.toSet());
 	}
 
 	/** {@inheritDoc} */
@@ -65,8 +79,17 @@ public class ClienteDTO implements DTO<Cliente> {
 		dominio.setNumeroDoDocumento(Optional.ofNullable(this.getNumeroDoDocumento())
 				.orElse(dominio.getNumeroDoDocumento()));
 
-		dominio.setTipoCliente(Optional.of(this.getTipoCliente())
+		dominio.setTipoCliente(Optional.ofNullable(this.getTipoCliente())
 				.orElse(dominio.getTipoCliente()));
+
+		dominio.setTelefones(Optional.ofNullable(this.telefones)
+				.orElse(dominio.getTelefones()));
+
+		dominio.setEnderecos(Optional.of(this.enderecos)
+				.map(e -> e.stream()
+						.map(end -> new Endereco(end))
+						.collect(Collectors.toSet()))
+				.orElse(dominio.getEnderecos()));
 
 		return dominio;
 	}
@@ -109,6 +132,26 @@ public class ClienteDTO implements DTO<Cliente> {
 	/** @param tipoCliente the tipoCliente to set */
 	public void setTipoCliente(String tipoCliente) {
 		this.tipoCliente = tipoCliente;
+	}
+
+	/** @return the enderecos */
+	public Set<EnderecoDTO> getEnderecos() {
+		return enderecos;
+	}
+
+	/** @param enderecos the enderecos to set */
+	public void setEnderecos(Set<EnderecoDTO> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	/** @return the telefones */
+	public Set<String> getTelefones() {
+		return telefones;
+	}
+
+	/** @param telefones the telefones to set */
+	public void setTelefones(Set<String> telefones) {
+		this.telefones = telefones;
 	}
 
 }
