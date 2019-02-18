@@ -91,6 +91,9 @@ public class ClienteDTO implements DTO<Cliente> {
 						.collect(Collectors.toSet()))
 				.orElse(dominio.getEnderecos()));
 
+		dominio.getEnderecos().stream()
+				.forEach(e -> e.setCliente(dominio));
+
 		return dominio;
 	}
 

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -51,7 +52,7 @@ public class Cliente implements Dominio {
 	@Column(name = "NUMERO")
 	private Set<String> telefones = new HashSet<>();
 
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private Set<Endereco> enderecos = new HashSet<>();
 
 	@JsonIgnore
@@ -93,6 +94,9 @@ public class Cliente implements Dominio {
 				.stream()
 				.map(e -> new Endereco(e))
 				.collect(Collectors.toSet());
+
+		this.enderecos.stream()
+				.forEach(e -> e.setCliente(this));
 	}
 
 	/** {@inheritDoc} */
