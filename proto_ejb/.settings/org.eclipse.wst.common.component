@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="proto_ejb-0.0.1-SNAPSHOT">
+        <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/ejbModule"/>
+        <property name="ClientProject" value="proto_ejb_Client"/>
+        <property name="ClientJARURI" value="proto_ejb_Client.jar"/>
+        <property name="context-root" value="proto_ejb"/>
+        <property name="java-output-path" value="/proto_ejb/target/classes"/>
+    </wb-module>
+</project-modules>
