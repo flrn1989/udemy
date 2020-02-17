@@ -17,7 +17,7 @@ public final class CategoriaDTO implements DTO<Categoria> {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty(message = "A Categoria deve possuir um nome.")
+	@NotEmpty(message = "Preenchimento obrigatório.")
 	@Size(min = 4,
 			max = 80,
 			message = "A Categoria deve ter nome de tamanho entre 4 e 80 caracteres.")

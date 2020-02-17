@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 import udemy.curso.dominios.Cliente;
 import udemy.curso.dominios.Endereco;
 import udemy.curso.interfaces.DTO;
+import udemy.curso.interfaces.anotacoes.CPFOuCNPJ;
 
 /** DTO de Cliente. */
 public class ClienteDTO implements DTO<Cliente> {
@@ -30,12 +31,17 @@ public class ClienteDTO implements DTO<Cliente> {
 	@Email
 	private String email;
 
+	@NotEmpty(message = "Preenchimento obrigatório.")
+	@CPFOuCNPJ
 	private String numeroDoDocumento;
 
+	@NotEmpty(message = "Preenchimento obrigatório.")
 	private String tipoCliente;
 
+	@NotEmpty(message = "Preenchimento obrigatório.")
 	private Set<EnderecoDTO> enderecos = new HashSet<>();
 
+	@NotEmpty(message = "Preenchimento obrigatório.")
 	private Set<String> telefones = new HashSet<>();
 
 	/** Construtor. */

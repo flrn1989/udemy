@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: proto_ejb_Client.jar
-
