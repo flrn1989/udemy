@@ -1,61 +1,59 @@
-/**
- * 
- */
 package udemy.curso.validadores;
 
 import java.util.InputMismatchException;
-import java.util.Optional;
+import java.util.Objects;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.StringUtils;
+
 import udemy.curso.interfaces.anotacoes.CPFOuCNPJ;
 
-/**
- * Validador para o campo de CPF ou CNPJ.
- * 
- * Fonte do código validador:
- * https://receitasdecodigo.com.br/java/classe-java-completa-para-gerar-e-validar-cpf-e-cnpj
- */
 public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, String> {
 
 	private static final int TAM_CPF = 11;
+	private String documento;
+	private ConstraintValidatorContext contexto;
 
-	/** {@inheritDoc} */
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-
-		boolean representaCPF = value.length() <= TAM_CPF;
-
-		boolean validade = Optional.ofNullable(value)
-				.map(retorno -> Optional
-						.of(value)
-						.filter(filtro -> representaCPF)
-						.map(m -> this.isCPF(value))
-						.orElse(this.isCNPJ(value)))
-				.orElse(false);
-
-		Optional.of(validade)
-				.filter(filtro -> !validade)
-				.ifPresent(c -> this.gerarMensagemDeInvalidade(value, context, representaCPF));
-
-		return validade;
+		this.documento = value;
+		this.contexto = context;
+		if (Objects.isNull(documento)) {
+			invalidarDocumentoNulo();
+			return false;
+		}
+		boolean documentoValido = documentoRepresentaCPF() ? isCPF(documento) : isCNPJ(documento);
+		if (!documentoValido) {
+			invalidarCPFOuCNPJ();
+		}
+		return documentoValido;
 	}
 
-	private ValidadorDeCPFOuCNPJ gerarMensagemDeInvalidade(String value, ConstraintValidatorContext context,
-			boolean representaCPF) {
-
-		context.disableDefaultConstraintViolation();
-		context.buildConstraintViolationWithTemplate("Documento de número inválido: " + value)
-				.addPropertyNode(representaCPF ? "CPF" : "CNPJ")
+	private void invalidarDocumentoNulo() {
+		contexto.buildConstraintViolationWithTemplate("O documento não deve ser vazio.")
 				.addConstraintViolation();
+	}
 
-		return this;
+	private boolean documentoRepresentaCPF() {
+		return Objects.nonNull(documento) && TAM_CPF >= documento.length();
+	}
+
+	private void invalidarCPFOuCNPJ() {
+		contexto.disableDefaultConstraintViolation();
+		StringBuilder msgb = new StringBuilder();
+		msgb.append(documentoRepresentaCPF() ? "CPF" : "CNPJ");
+		msgb.append(" de número inválido: ");
+		msgb.append(documento);
+		contexto
+				.buildConstraintViolationWithTemplate(msgb.toString())
+				.addConstraintViolation();
 	}
 
 	public boolean isCPF(String cpf) {
 
-		cpf = removeCaracteresEspeciais(cpf);
+		cpf = removerCaracteresEspeciais(cpf);
 
 		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
 				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
@@ -118,7 +116,7 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 
 	public boolean isCNPJ(String cnpj) {
 
-		cnpj = removeCaracteresEspeciais(cnpj);
+		cnpj = removerCaracteresEspeciais(cnpj);
 
 		// considera-se erro CNPJ's formados por uma sequencia de numeros iguais
 		if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111") || cnpj.equals("22222222222222")
@@ -184,26 +182,11 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 		return ((r == 0) || (r == 1)) ? '0' : (char) ((11 - r) + 48);
 	}
 
-	private String removeCaracteresEspeciais(String doc) {
-		if (doc.contains(".")) {
-			doc = doc.replace(".", "");
-		}
-		if (doc.contains("-")) {
-			doc = doc.replace("-", "");
-		}
-		if (doc.contains("/")) {
-			doc = doc.replace("/", "");
-		}
+	private String removerCaracteresEspeciais(String doc) {
+		doc = doc.replace(".", StringUtils.EMPTY);
+		doc = doc.replace("-", StringUtils.EMPTY);
+		doc = doc.replace("/", StringUtils.EMPTY);
 		return doc;
-	}
-
-	public static String imprimeCNPJ(String cnpj) {
-		// máscara do CNPJ: 99.999.999.9999-99
-		return (cnpj.substring(0, 2) + "."
-				+ cnpj.substring(2, 5) + "."
-				+ cnpj.substring(5, 8) + "."
-				+ cnpj.substring(8, 12) + "-"
-				+ cnpj.substring(12, 14));
 	}
 
 }
