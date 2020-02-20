@@ -1,6 +1,3 @@
-/**
- * 
- */
 package udemy.curso.controladores;
 
 import java.net.URI;
@@ -17,10 +14,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,153 +28,101 @@ import udemy.curso.excecoes.rest.ExcecaoDeIntegridadeDeDados;
 import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
-/** Controlador abstrato para os demais controladores de domínio. */
-public abstract class ControladorDeDominio<TipoDoDominio extends Dominio, TipoDoDTO extends DTO<TipoDoDominio>> {
+public abstract class ControladorDeDominio<D extends Dominio, O extends DTO<D>> {
 
 	@Autowired
-	protected JpaRepository<TipoDoDominio, Integer> repositorio;
+	protected JpaRepository<D, Integer> repositorio;
 
-	/** @param dto
-	 * @return Response sem conteúdo. */
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	@Transactional
-	public ResponseEntity<Void> salvar(@Valid @RequestBody TipoDoDTO dto) {
-
-		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio();
-
-		prepararCriacao(dominio);
-
+	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto) {
+		D dominio = dto.paraDominio();
+		preInsercao(dominio);
+		dominio.setId(null);
+		dominio = repositorio.save(dominio);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(dominio.getId())
 				.toUri();
-
 		return ResponseEntity.created(location).build();
 	}
 
-	/** @param dominio
-	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
-	 *         antes da criação. */
-	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararCriacao(
-			TipoDoDominio dominio) {
-
-		dominio.setId(null);
-
-		dominio = repositorio.save(dominio);
-
-		return this;
-	}
-
-	/** @param dto
-	 * @param id
-	 * @return Response sem conteúdo. */
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping(value = "/{id}")
 	@Transactional
-	public ResponseEntity<Void> salvar(
-			@Valid @RequestBody TipoDoDTO dto,
-			@PathVariable Integer id) {
-
-		TipoDoDominio dominio = (TipoDoDominio) dto.paraDominio(
-				this.obterPorId(id)
-						.getBody());
-
-		prepararAtualizacao(dominio, id);
-
+	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto, @PathVariable Integer id) {
+		D dominio = dto.paraDominio(this.obterPorId(id).getBody());
+		preAtualizacao(dominio);
+		repositorio.save(dominio);
 		return ResponseEntity.noContent().build();
 	}
 
-	/** @param dominio
-	 * @param id
-	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
-	 *         antes da atualização. */
-	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararAtualizacao(
-			TipoDoDominio dominio,
-			Integer id) {
-
-		repositorio.save(dominio);
-
-		return this;
-	}
-
-	/** @return Listagem dos DTOs de todos os domínios encontrados. */
-	@RequestMapping(method = RequestMethod.GET)
-	public List<?> listarTodos() {
-		return repositorio.findAll()
+	@SuppressWarnings("unchecked")
+	@GetMapping
+	public List<O> listarTodos() {
+		return (List<O>) repositorio.findAll()
 				.stream()
-				.map(obj -> obj.paraDTO())
+				.map(D::paraDTO)
 				.collect(Collectors.toList());
 	}
 
-	/** @param pagina
-	 * @param quantidadePorPagina
-	 * @param ordenacao
-	 * @param propriedadesOrdenadoras
-	 * @return Listagem dos DTOs dos domínios paginados. */
-	@RequestMapping(method = RequestMethod.GET, value = "/paginacao")
-	public Page<?> listarPorPagina(
-			@RequestParam(value = "pag",
-					defaultValue = "0") Integer pagina,
-
-			@RequestParam(value = "qtd",
-					defaultValue = "3") Integer quantidadePorPagina,
-
-			@RequestParam(value = "dir",
-					defaultValue = "asc") String ordenacao,
-
-			@RequestParam(value = "prp",
-					defaultValue = "id") String... propriedadesOrdenadoras) {
-
+	@SuppressWarnings("unchecked")
+	@GetMapping(value = "/paginacao")
+	public Page<O> listarPorPagina(
+			@RequestParam(value = "pag", defaultValue = "0") Integer pagina,
+			@RequestParam(value = "qtd", defaultValue = "3") Integer quantidadePorPagina,
+			@RequestParam(value = "dir", defaultValue = "asc") String ordenacao,
+			@RequestParam(value = "prp", defaultValue = "id") String... propriedadesOrdenadoras) {
 		PageRequest paginavel = PageRequest.of(
 				pagina,
 				quantidadePorPagina,
 				Direction.fromOptionalString(ordenacao).orElse(Direction.ASC),
 				propriedadesOrdenadoras);
-
-		return repositorio.findAll(paginavel).map(obj -> obj.paraDTO());
+		return (Page<O>) repositorio.findAll(paginavel).map(D::paraDTO);
 	}
 
-	/** @param id
-	 * @return Domínio de ID referente. */
-	@RequestMapping(method = RequestMethod.GET, path = "/{id}")
-	public ResponseEntity<TipoDoDominio> obterPorId(@PathVariable Integer id) {
-
-		return ResponseEntity.ok(
-				repositorio
-						.findById(id)
-						.orElseThrow(() -> new ExcecaoDeBuscaVazia()));
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<D> obterPorId(@PathVariable Integer id) {
+		return repositorio.findById(id)
+				.map(ResponseEntity::ok)
+				.orElseThrow(ExcecaoDeBuscaVazia::new);
 	}
 
-	/** @param id
-	 * @return NoContent
-	 * @throws ExcecaoDeIntegridadeDeDados quando o objeto não pôde ser manipulado
-	 *                                     por possuir vínculos no banco de
-	 *                                     dados. */
-	@RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
+	@DeleteMapping(path = "/{id}")
 	@Transactional
-	public ResponseEntity<Void> deletarPorId(@PathVariable Integer id)
-			throws Throwable {
-
-		this.obterPorId(id);
-
+	public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
+		ResponseEntity<D> dominio = this.obterPorId(id);
+		preDelecao(dominio.getBody());
 		try {
-			prepararDelecao(id);
-
+			repositorio.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new ExcecaoDeIntegridadeDeDados(e);
 		}
-
 		return ResponseEntity.noContent().build();
 	}
 
-	/** @param id
-	 * @return Método a ser sobrescrito caso haja alguma operação para realizar
-	 *         antes da deleção. */
-	protected ControladorDeDominio<TipoDoDominio, TipoDoDTO> prepararDelecao(Integer id) {
+	/**
+	 * Método a ser sobrescrito pela especialização do controlador no caso de
+	 * necessidade.
+	 * 
+	 * @param dominio
+	 */
+	protected void preInsercao(D dominio) {}
 
-		repositorio.deleteById(id);
+	/*
+	 * Método a ser sobrescrito pela especialização do controlador no caso de
+	 * necessidade.
+	 * 
+	 * @param dominio
+	 */
+	protected void preAtualizacao(D dominio) {}
 
-		return this;
-	}
+	/*
+	 * Método a ser sobrescrito pela especialização do controlador no caso de
+	 * necessidade.
+	 * 
+	 * @param dominio
+	 */
+	protected void preDelecao(D dominio) {}
 
 }
