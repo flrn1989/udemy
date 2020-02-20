@@ -13,18 +13,19 @@ import udemy.curso.interfaces.anotacoes.CPFOuCNPJ;
 public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, String> {
 
 	private static final int TAM_CPF = 11;
+	private static final int TAM_CNPJ = 14;
 	private String documento;
 	private ConstraintValidatorContext contexto;
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		this.documento = value;
+		this.documento = StringUtils.normalizeSpace(value);
 		this.contexto = context;
 		if (Objects.isNull(documento)) {
 			invalidarDocumentoNulo();
 			return false;
 		}
-		boolean documentoValido = documentoRepresentaCPF() ? isCPF(documento) : isCNPJ(documento);
+		boolean documentoValido = documentoRepresentaCPF() ? eCPFValido() : eCNPJValido();
 		if (!documentoValido) {
 			invalidarCPFOuCNPJ();
 		}
@@ -46,30 +47,21 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 		msgb.append(documentoRepresentaCPF() ? "CPF" : "CNPJ");
 		msgb.append(" de número inválido: ");
 		msgb.append(documento);
-		contexto
-				.buildConstraintViolationWithTemplate(msgb.toString())
+		contexto.buildConstraintViolationWithTemplate(msgb.toString())
 				.addConstraintViolation();
 	}
 
-	public boolean isCPF(String cpf) {
-
-		cpf = removerCaracteresEspeciais(cpf);
-
-		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
-				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
-				|| cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
-				|| cpf.equals("99999999999") || (cpf.length() != TAM_CPF)) {
-			return (false);
+	public boolean eCPFValido() {
+		removerCaracteresEspeciais();
+		String cpf = documento;
+		if (todosCaracteresSaoIguais() || documentoDeTamanhoDiferenteDeCPF()) {
+			return false;
 		}
 
-		char dig10;
-		char dig11;
-		int sm;
-		int i;
-		int r;
-		int num;
-		int peso;
+		char dig10, dig11;
+		int sm, i, r, num, peso;
 
+		// "try" - protege o codigo para eventuais erros de conversao de tipo (int)
 		try {
 			// Calculo do 1o. Digito Verificador
 			sm = 0;
@@ -78,7 +70,7 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 				// converte o i-esimo caractere do CPF em um numero:
 				// por exemplo, transforma o caractere '0' no inteiro 0
 				// (48 eh a posicao de '0' na tabela ASCII)
-				num = (cpf.charAt(i) - 48);
+				num = (int) (cpf.charAt(i) - 48);
 				sm = sm + (num * peso);
 				peso = peso - 1;
 			}
@@ -93,7 +85,7 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 			sm = 0;
 			peso = 11;
 			for (i = 0; i < 10; i++) {
-				num = (cpf.charAt(i) - 48);
+				num = (int) (cpf.charAt(i) - 48);
 				sm = sm + (num * peso);
 				peso = peso - 1;
 			}
@@ -112,18 +104,64 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 		} catch (InputMismatchException erro) {
 			return (false);
 		}
+
+//		char dig10;
+//		char dig11;
+//		int sm;
+//		int i;
+//		int r;
+//		int num;
+//		int peso;
+//
+//		try {
+//			// Calculo do 1o. Digito Verificador
+//			sm = 0;
+//			peso = 10;
+//			for (i = 0; i < 9; i++) {
+//				// converte o i-esimo caractere do CPF em um numero:
+//				// por exemplo, transforma o caractere '0' no inteiro 0
+//				// (48 eh a posicao de '0' na tabela ASCII)
+//				num = (cpf.charAt(i) - 48);
+//				sm = sm + (num * peso);
+//				peso = peso - 1;
+//			}
+//
+//			r = 11 - (sm % 11);
+//			if ((r == 10) || (r == 11))
+//				dig10 = '0';
+//			else
+//				dig10 = (char) (r + 48); // converte no respectivo caractere numerico
+//
+//			// Calculo do 2o. Digito Verificador
+//			sm = 0;
+//			peso = 11;
+//			for (i = 0; i < 10; i++) {
+//				num = (cpf.charAt(i) - 48);
+//				sm = sm + (num * peso);
+//				peso = peso - 1;
+//			}
+//
+//			r = 11 - (sm % 11);
+//			if ((r == 10) || (r == 11))
+//				dig11 = '0';
+//			else
+//				dig11 = (char) (r + 48);
+//
+//			// Verifica se os digitos calculados conferem com os digitos informados.
+//			if ((dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10)))
+//				return (true);
+//			else
+//				return (false);
+//		} catch (InputMismatchException erro) {
+//			return (false);
+//		}
 	}
 
-	public boolean isCNPJ(String cnpj) {
-
-		cnpj = removerCaracteresEspeciais(cnpj);
-
-		// considera-se erro CNPJ's formados por uma sequencia de numeros iguais
-		if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111") || cnpj.equals("22222222222222")
-				|| cnpj.equals("33333333333333") || cnpj.equals("44444444444444") || cnpj.equals("55555555555555")
-				|| cnpj.equals("66666666666666") || cnpj.equals("77777777777777") || cnpj.equals("88888888888888")
-				|| cnpj.equals("99999999999999") || (cnpj.length() != 14)) {
-			return (false);
+	public boolean eCNPJValido() {
+		removerCaracteresEspeciais();
+		String cnpj = documento;
+		if (todosCaracteresSaoIguais() || documentoDeTamanhoDiferenteDeCNPJ()) {
+			return false;
 		}
 
 		char dig13;
@@ -182,11 +220,32 @@ public class ValidadorDeCPFOuCNPJ implements ConstraintValidator<CPFOuCNPJ, Stri
 		return ((r == 0) || (r == 1)) ? '0' : (char) ((11 - r) + 48);
 	}
 
-	private String removerCaracteresEspeciais(String doc) {
-		doc = doc.replace(".", StringUtils.EMPTY);
-		doc = doc.replace("-", StringUtils.EMPTY);
-		doc = doc.replace("/", StringUtils.EMPTY);
-		return doc;
+	private void removerCaracteresEspeciais() {
+		this.documento = StringUtils.remove(documento, ".");
+		this.documento = StringUtils.remove(documento, "-");
+		this.documento = StringUtils.remove(documento, "/");
+	}
+
+	private boolean todosCaracteresSaoIguais() {
+		String primeiroDigito = StringUtils.firstNonBlank(documento);
+		String digitosDiferentes = StringUtils.remove(documento, primeiroDigito);
+		return StringUtils.isBlank(digitosDiferentes);
+	}
+
+	private boolean documentoDeTamanhoDiferenteDeCPF() {
+		return !documentoDeTamanhoDeCPF();
+	}
+
+	private boolean documentoDeTamanhoDeCPF() {
+		return Objects.nonNull(documento) && TAM_CPF == documento.length();
+	}
+
+	private boolean documentoDeTamanhoDiferenteDeCNPJ() {
+		return !documentoDeTamanhoDeCNPJ();
+	}
+
+	private boolean documentoDeTamanhoDeCNPJ() {
+		return Objects.nonNull(documento) && TAM_CNPJ == documento.length();
 	}
 
 }
