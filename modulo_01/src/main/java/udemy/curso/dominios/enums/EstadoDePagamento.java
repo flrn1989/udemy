@@ -1,11 +1,12 @@
-/**
- * 
- */
 package udemy.curso.dominios.enums;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import udemy.curso.interfaces.EnumIdentificavel;
 
-/** Enumerador para estados de pagamentos. */
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum EstadoDePagamento implements EnumIdentificavel {
 
 	PENDENTE(1, "Pendente"),
@@ -13,24 +14,6 @@ public enum EstadoDePagamento implements EnumIdentificavel {
 	CANCELADO(3, "Cancelado");
 
 	private Integer id;
-
 	private String descricao;
-
-	/** @param id
-	 * @param descricao */
-	private EstadoDePagamento(Integer id, String descricao) {
-		this.id = id;
-		this.descricao = descricao;
-	}
-
-	/** {@inheritDoc} */
-	public Integer getId() {
-		return id;
-	}
-
-	/** {@inheritDoc} */
-	public String getDescricao() {
-		return descricao;
-	}
 
 }
