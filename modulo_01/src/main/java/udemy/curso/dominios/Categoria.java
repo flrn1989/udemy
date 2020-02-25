@@ -1,6 +1,3 @@
-/**
- * 
- */
 package udemy.curso.dominios;
 
 import java.util.HashSet;
@@ -14,12 +11,17 @@ import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import udemy.curso.dto.CategoriaDTO;
 import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
-/** Classe de domínio de Categoria. */
 @Entity
+@EqualsAndHashCode(of = "nome")
+@Data
+@NoArgsConstructor
 public class Categoria implements Dominio {
 
 	private static final long serialVersionUID = 1L;
@@ -34,86 +36,17 @@ public class Categoria implements Dominio {
 	@ManyToMany(mappedBy = "categorias")
 	private Set<Produto> produtos = new HashSet<>();
 
-	/** Construtor padrão. */
-	public Categoria() {
-	}
-
-	/** @param nome */
 	public Categoria(String nome) {
 		this.nome = nome;
 	}
 
-	/** @param dto */
 	public Categoria(CategoriaDTO dto) {
 		this.nome = dto.getNome();
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public DTO<Categoria> paraDTO() {
 		return new CategoriaDTO(this);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		return result;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Categoria other = (Categoria) obj;
-		if (nome == null) {
-			if (other.nome != null) {
-				return false;
-			}
-		} else if (!nome.equals(other.nome)) {
-			return false;
-		}
-		return true;
-	}
-
-	/** @return the id */
-	public Integer getId() {
-		return id;
-	}
-
-	/** @param id the id to set */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/** @return the nome */
-	public String getNome() {
-		return nome;
-	}
-
-	/** @param nome the nome to set */
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	/** @return the produtos */
-	public Set<Produto> getProdutos() {
-		return produtos;
-	}
-
-	/** @param produtos the produtos to set */
-	public void setProdutos(Set<Produto> produtos) {
-		this.produtos = produtos;
 	}
 
 }
