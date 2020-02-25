@@ -24,7 +24,7 @@ import udemy.curso.util.ExtratoraDeEnum;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
-@EqualsAndHashCode(of = { "id" })
+@EqualsAndHashCode(of = "id")
 @Data
 public abstract class Pagamento implements Dominio {
 
