@@ -58,7 +58,7 @@ public class ClienteDTO implements DTO<Cliente> {
 
 		this.enderecos = cliente.getEnderecos()
 				.stream()
-				.map(e -> new EnderecoDTO(e))
+				.map(EnderecoDTO::new)
 				.collect(Collectors.toSet());
 	}
 
@@ -93,7 +93,7 @@ public class ClienteDTO implements DTO<Cliente> {
 
 		dominio.setEnderecos(Optional.of(this.enderecos)
 				.map(e -> e.stream()
-						.map(end -> new Endereco(end))
+						.map(Endereco::new)
 						.collect(Collectors.toSet()))
 				.orElse(dominio.getEnderecos()));
 
