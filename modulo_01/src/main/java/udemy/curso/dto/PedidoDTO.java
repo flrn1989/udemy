@@ -37,7 +37,7 @@ public class PedidoDTO implements DTO<Pedido> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Pedido paraDominio(Pedido dominio) {
+	public Pedido preencher(Pedido dominio) {
 
 		if (Objects.isNull(dominio)) {
 			return paraDominio();

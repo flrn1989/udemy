@@ -70,7 +70,7 @@ public class ClienteDTO implements DTO<Cliente> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Cliente paraDominio(Cliente dominio) {
+	public Cliente preencher(Cliente dominio) {
 
 		if (Objects.isNull(dominio)) {
 			return paraDominio();

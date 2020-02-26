@@ -42,7 +42,7 @@ public class ProdutoDTO implements DTO<Produto> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Produto paraDominio(Produto dominio) {
+	public Produto preencher(Produto dominio) {
 
 		if (Objects.isNull(dominio)) {
 			return paraDominio();

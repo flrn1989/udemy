@@ -40,7 +40,7 @@ public final class CategoriaDTO implements DTO<Categoria> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Categoria paraDominio(Categoria dominio) {
+	public Categoria preencher(Categoria dominio) {
 
 		if (Objects.isNull(dominio)) {
 			return paraDominio();

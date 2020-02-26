@@ -51,7 +51,7 @@ public abstract class ControladorDeDominio<D extends Dominio, O extends DTO<D>> 
 	@PutMapping(value = "/{id}")
 	@Transactional
 	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto, @PathVariable Integer id) {
-		D dominio = dto.paraDominio(this.obterPorId(id).getBody());
+		D dominio = dto.preencher(this.obterPorId(id).getBody());
 		preAtualizacao(dominio);
 		repositorio.save(dominio);
 		return ResponseEntity.noContent().build();

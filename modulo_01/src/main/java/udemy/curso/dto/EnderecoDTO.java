@@ -53,7 +53,7 @@ public class EnderecoDTO implements DTO<Endereco> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Endereco paraDominio(Endereco dominio) {
+	public Endereco preencher(Endereco dominio) {
 
 		if (Objects.isNull(dominio)) {
 			return paraDominio();
