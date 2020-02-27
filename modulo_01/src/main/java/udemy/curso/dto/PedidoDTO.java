@@ -40,7 +40,7 @@ public class PedidoDTO implements DTO<Pedido> {
 	public Pedido preencher(Pedido dominio) {
 
 		if (Objects.isNull(dominio)) {
-			return paraDominio();
+			dominio = new Pedido();
 		}
 
 		dominio.setInstante(Optional.ofNullable(this.getInstante())

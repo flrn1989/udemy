@@ -1,12 +1,12 @@
 package udemy.curso.dto;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import udemy.curso.dominios.Cidade;
-import udemy.curso.dominios.Estado;
 import udemy.curso.interfaces.DTO;
 
 @Data
@@ -17,20 +17,19 @@ public class CidadeDTO implements DTO<Cidade> {
 	private static final long serialVersionUID = 1L;
 
 	private String nome;
-	private Estado estado;
+	private EstadoDTO estado;
 
 	@Override
-	public Cidade paraDominio() {
-		return preencher(new Cidade());
-	}
-
-	@Override
-	public Cidade preencher(Cidade dominio) {
+	public Cidade preencher(Cidade dominio) throws ReflectiveOperationException {
 		if (Objects.isNull(dominio)) {
-			return null;
+			dominio = new Cidade();
 		}
-		dominio.setNome(nome);
-		dominio.setEstado(estado);
+		dominio.setNome(Optional
+				.ofNullable(nome)
+				.orElse(dominio.getNome()));
+		dominio.setEstado(Optional
+				.ofNullable(estado.paraDominio())
+				.orElse(dominio.getEstado()));
 		return dominio;
 	}
 

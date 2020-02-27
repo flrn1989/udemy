@@ -18,14 +18,11 @@ public final class CategoriaDTO implements DTO<Categoria> {
 	private static final long serialVersionUID = 1L;
 
 	@NotEmpty(message = "Preenchimento obrigatório.")
-	@Size(min = 4,
-			max = 80,
-			message = "A Categoria deve ter nome de tamanho entre 4 e 80 caracteres.")
+	@Size(min = 4, max = 80, message = "A Categoria deve ter nome de tamanho entre 4 e 80 caracteres.")
 	private String nome;
 
 	/** Construtor. */
-	public CategoriaDTO() {
-	}
+	public CategoriaDTO() {}
 
 	/** Construtor a partir do domínio. */
 	public CategoriaDTO(Categoria categoria) {
@@ -34,21 +31,13 @@ public final class CategoriaDTO implements DTO<Categoria> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Categoria paraDominio() {
-		return new Categoria(this);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Categoria preencher(Categoria dominio) {
-
 		if (Objects.isNull(dominio)) {
-			return paraDominio();
+			dominio = new Categoria();
 		}
-
-		dominio.setNome(Optional.ofNullable(this.getNome())
+		dominio.setNome(Optional
+				.ofNullable(this.getNome())
 				.orElse(dominio.getNome()));
-
 		return dominio;
 	}
 

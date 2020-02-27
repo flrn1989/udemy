@@ -24,8 +24,7 @@ public class ProdutoDTO implements DTO<Produto> {
 	private Set<Categoria> categorias = new HashSet<>();
 
 	/** Construtor. */
-	public ProdutoDTO() {
-	}
+	public ProdutoDTO() {}
 
 	/** Construtor do domínio. */
 	public ProdutoDTO(Produto produto) {
@@ -45,7 +44,7 @@ public class ProdutoDTO implements DTO<Produto> {
 	public Produto preencher(Produto dominio) {
 
 		if (Objects.isNull(dominio)) {
-			return paraDominio();
+			dominio = new Produto();
 		}
 
 		dominio.setNome(Optional.ofNullable(this.getNome())

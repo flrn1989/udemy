@@ -40,10 +40,6 @@ public class Categoria implements Dominio {
 		this.nome = nome;
 	}
 
-	public Categoria(CategoriaDTO dto) {
-		this.nome = dto.getNome();
-	}
-
 	@Override
 	public DTO<Categoria> paraDTO() {
 		return new CategoriaDTO(this);

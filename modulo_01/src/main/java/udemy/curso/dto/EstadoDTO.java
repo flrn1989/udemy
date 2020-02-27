@@ -1,6 +1,7 @@
 package udemy.curso.dto;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,9 +21,11 @@ public class EstadoDTO implements DTO<Estado> {
 	@Override
 	public Estado preencher(Estado dominio) {
 		if (Objects.isNull(dominio)) {
-			return null;
+			dominio = new Estado();
 		}
-		this.nome = dominio.getNome();
+		dominio.setNome(Optional
+				.ofNullable(this.nome)
+				.orElse(dominio.getNome()));
 		return dominio;
 	}
 

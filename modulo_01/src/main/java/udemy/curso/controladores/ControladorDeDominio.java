@@ -35,7 +35,7 @@ public abstract class ControladorDeDominio<D extends Dominio, O extends DTO<D>> 
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto) {
+	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto) throws ReflectiveOperationException {
 		D dominio = dto.paraDominio();
 		preInsercao(dominio);
 		dominio.setId(null);
@@ -50,7 +50,8 @@ public abstract class ControladorDeDominio<D extends Dominio, O extends DTO<D>> 
 
 	@PutMapping(value = "/{id}")
 	@Transactional
-	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto, @PathVariable Integer id) {
+	public ResponseEntity<Void> salvar(@Valid @RequestBody O dto, @PathVariable Integer id)
+			throws ReflectiveOperationException {
 		D dominio = dto.preencher(this.obterPorId(id).getBody());
 		preAtualizacao(dominio);
 		repositorio.save(dominio);

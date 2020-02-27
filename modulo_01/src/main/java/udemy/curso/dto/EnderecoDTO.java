@@ -56,7 +56,7 @@ public class EnderecoDTO implements DTO<Endereco> {
 	public Endereco preencher(Endereco dominio) {
 
 		if (Objects.isNull(dominio)) {
-			return paraDominio();
+			dominio = new Endereco();
 		}
 
 		dominio.setLogradouro(Optional.ofNullable(this.getLogradouro())

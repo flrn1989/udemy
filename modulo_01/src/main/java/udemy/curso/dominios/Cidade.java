@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import udemy.curso.dto.CidadeDTO;
+import udemy.curso.dto.EstadoDTO;
 import udemy.curso.interfaces.DTO;
 import udemy.curso.interfaces.Dominio;
 
@@ -54,7 +55,7 @@ public class Cidade implements Dominio {
 
 	@Override
 	public DTO<Cidade> paraDTO() {
-		return new CidadeDTO(nome, estado);
+		return new CidadeDTO(nome, new EstadoDTO(estado.getNome()));
 	}
 
 }

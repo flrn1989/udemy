@@ -64,16 +64,10 @@ public class ClienteDTO implements DTO<Cliente> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Cliente paraDominio() {
-		return new Cliente(this);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Cliente preencher(Cliente dominio) {
 
 		if (Objects.isNull(dominio)) {
-			return paraDominio();
+			dominio = new Cliente();
 		}
 
 		dominio.setEmail(Optional.ofNullable(this.getEmail())
@@ -97,8 +91,9 @@ public class ClienteDTO implements DTO<Cliente> {
 						.collect(Collectors.toSet()))
 				.orElse(dominio.getEnderecos()));
 
-		dominio.getEnderecos().stream()
-				.forEach(e -> e.setCliente(dominio));
+		for (Endereco e : dominio.getEnderecos()) {
+			e.setCliente(dominio);
+		}
 
 		return dominio;
 	}

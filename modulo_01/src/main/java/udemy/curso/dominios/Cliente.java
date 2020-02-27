@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -90,10 +92,12 @@ public class Cliente implements Dominio {
 	}
 
 	public String getTipoCliente() {
-		return ExtratoraDeEnum
-				.extrairDe(TipoCliente.values())
-				.valorCom(this.idDoTipoCliente)
-				.getDescricao();
+		return Optional.ofNullable(idDoTipoCliente)
+				.map(t -> ExtratoraDeEnum
+						.extrairDe(TipoCliente.values())
+						.valorCom(t)
+						.getDescricao())
+				.orElse(StringUtils.EMPTY);
 	}
 
 	public void setTipoCliente(TipoCliente tipoCliente) {
